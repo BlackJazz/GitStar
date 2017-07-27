@@ -1,66 +1,106 @@
 <template>
   <div id="viewer">
     <div class="box" v-if="!Object.is(star, null)">
-      <p class="box-title">
-        <span>{{ star.title }}</span>
-        <span>
-          <i class="fa fa-user fa-1x"></i> {{ star.user }}
-          <i class="fa fa-star fa-1x"></i> {{ star.stars }}
-        </span>
-      </p>
-      <p class="box-content">{{ star.description }}</p>
-      <ul class="box-tags">
-        <li><span class="box-tag">123</span></li>
-      </ul>
-      <p class="box-title">
-        <span>README.md</span>
-      </p>
-      <p class="box-content"></p>
+      <div class="box-star">
+        <p class="box-star-info">
+          <span>{{ star.title }}</span>
+          <span>
+            <i class="fa fa-user fa-1x"></i> {{ star.user }}
+            <i class="fa fa-star fa-1x"></i> {{ star.stars }}
+          </span>
+        </p>
+        <p class="box-star-description">{{ star.description }}</p>
+        <ul class="box-star-tags">
+          <li><span class="box-star-tag">123</span></li>
+        </ul>
+      </div>
+      <div class="box-read">
+        <p class="box-read-info">
+          <span>README.md</span>
+        </p>
+        <div class="box-read-content">
+          <vueMarkDown :source="this.md.body"></vueMarkDown>
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import VueMarkDown from 'vue-markdown'
+import http from '@/http'
 
 export default {
   name: 'viewer',
   data () {
     return {
+      md: ''
     }
+  },
+  created () {
+    this.getMarkDown()
+  },
+  components: {
+    VueMarkDown
   },
   computed: {
     ...mapState({
       star: store => store.star.currentStar
     })
+  },
+  methods: {
+    async getMarkDown () {
+      this.md = await http.get('https://raw.githubusercontent.com/miaolz123/vue-markdown/master/README.md')
+    }
   }
 }
 </script>
 
-<style scoped>
+<style>
 #viewer{
   flex: 1;
+  overflow: auto;
 }
+#viewer::-webkit-scrollbar{width: 6px; background: #ddd;}
+#viewer::-webkit-scrollbar-button{display: none;}
+#viewer::-webkit-scrollbar-thumb{background: #5b6875;border-radius: 3px;}
+#viewer::-webkit-scrollbar-corner{display: none;}
 .box{
-  border-top: 1px solid #ccc;
   overflow: hidden;
 }
-.box-title{
-  padding: 0.6rem 1.5rem;
+.box-star{
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #ccc;
+}
+.box-star-info{
   display: flex;
   justify-content: space-between;
 }
-.box-tags{
-  padding: 0.3rem 1.5rem 0.9rem 1.5rem;
+.box-star-description{
+  color: #666;
+  padding: 1rem 0;
+}
+.box-star-tags{
+  padding-bottom: .5rem;
   list-style:none;
 }
-.box-tag{
+.box-star-tag{
   font-size: 0.7rem;
   padding: 0.2rem 0.5rem;
-  background: #6492ff;
+  border: 1px solid #aaa;
   border-radius: .5rem;
 }
-.box-content{
-  padding: 0.6rem 1.5rem;
+.box-read{
+  max-width: 700px;
+  width: 80%;
+  margin: 2rem auto;
+}
+.box-read-content{
+  line-height: 2rem;
+  padding: 0.6rem 0;
+}
+.box-read-content div *{
+  margin-bottom: .5rem;
 }
 </style>

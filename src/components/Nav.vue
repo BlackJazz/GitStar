@@ -12,8 +12,12 @@
       <input class="input" type="text" placeholder="">
     </button>
     <button class="title">Tags</button>
-    <ul class="tag-list" @click="selectTag()">
-      <li v-for="each of tags" :key="each.id" class="tag-item">
+    <ul class="tag-list">
+      <li class="tag-item"
+          @click="selectTag(each)"
+          v-for="each of tags"
+          :key="each.id"
+          :class="{ 'tag-active': isActive === each }">
         <span class="tag-name">{{ each }}</span>
         <span class="tag-count">6</span>
       </li>
@@ -29,6 +33,7 @@ export default {
   name: 'nav',
   data () {
     return {
+      isActive: ''
     }
   },
   computed: {
@@ -44,11 +49,9 @@ export default {
       window.localStorage.removeItem('token')
       this.$router.replace({ path: '/login' })
     },
-    selectTag () {
-      let tag
-      if (window.event.target.className === 'tag-name') tag = window.event.target
-      else tag = window.event.target.children[0]
-      this.getCurrentList(tag.innerHTML)
+    selectTag (tag) {
+      this.isActive = tag
+      this.getCurrentList(tag)
     }
   }
 }
@@ -62,7 +65,6 @@ export default {
   flex: 0 0 11rem;
   background: #3a3f51;
   color: #ccced6;
-  border-right: 1px solid #ccc;
 }
 .user{
   margin: 1rem 0;
@@ -84,7 +86,13 @@ export default {
   height: 4rem;
 }
 .name{text-align: center;}
-.quit{color: #ccced6;text-decoration: underline;}
+.quit{
+  color: #ccced6;
+  text-decoration: underline;
+}
+.quit:hover{
+  cursor: pointer;
+}
 .search{
   padding: .2rem;
   width: 95%;
@@ -103,6 +111,7 @@ export default {
 .title{
   width: 100%;
   padding: 0.5rem 0;
+  margin-bottom: .3rem;
   color: #ccced6;
   font-size: 1rem;
   border-bottom: 1px solid #2e3344;
@@ -112,20 +121,28 @@ export default {
   overflow: auto;
   width: 100%;
   list-style: none;
+  color: #ccced6;
+}
+.tag-active{
+  background: #eee;
+  color: #444;
 }
 .tag-list::-webkit-scrollbar{width: 3px;}
 .tag-list::-webkit-scrollbar-button{display: none;}
-.tag-list::-webkit-scrollbar-thumb{background: #aaa;border-radius: 2px;}
+.tag-list::-webkit-scrollbar-thumb{background: #ccc;border-radius: 2px;}
 .tag-list::-webkit-scrollbar-corner{display: none;}
 .tag-item{
   display: flex;
   justify-content: space-between;
   padding: 0.3rem 1rem;
 }
-.tag-item:hover{background: #7c86b1;}
+.tag-item:hover{
+  background: #eee;
+  color: #444;
+  cursor: pointer;
+}
 .tag-count{
   font-size:0.9rem;
-  color: #ccced6;
 }
 .loading{
   padding: .5rem 0;
