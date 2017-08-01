@@ -2,20 +2,17 @@ import http from '@/http'
 
 export default {
   state: {
+    all: [],
     stars: {},
-    tags: [],
     currentList: [],
     currentStar: null
   },
   mutations: {
+    setAll (state, payload) {
+      state.all = payload.all
+    },
     setStars (state, payload) {
       state.stars = payload.stars
-    },
-    setTags (state, payload) {
-      state.tags = payload.tags
-    },
-    addTag (state, payload) {
-      state.tags.push(payload.tag)
     },
     setCurrentList (state, payload) {
       state.currentList = payload.stars
@@ -25,25 +22,51 @@ export default {
     }
   },
   actions: {
-    async getStars ({ commit }) {
-      let res = await http.get('https://api.github.com/users/blackjazz/starred')
-      commit({
-        type: 'setStars',
-        stars: { 'All': res.body, 'Unclassified': [] }
+    async getAll ({ commit }) {
+      let token = window.localStorage.getItem('token')
+      let res = await http({
+        method: 'GET',
+        url: 'https://git-star.herokuapp.com/repos',
+        headers: { 'Authorization': 'TOKEN ' + JSON.parse(token) }
       })
       commit({
-        type: 'setTags',
-        tags: ['All', 'Unclassified']
+        type: 'setAll',
+        all: res.body
       })
       commit({
         type: 'setCurrentList',
         stars: res.body
       })
+      let stars = { 'Uncategorized': [] }
+      for (let star of res.body) {
+        if (star.categories.length === 0) {
+          stars['Uncategorized'].push(star)
+        } else {
+          for (let cate of star.categories) {
+            if (Object.keys(stars).includes(cate)) {
+              stars[cate].push(star)
+            } else {
+              Object.assign(stars, { cate: [] })
+              stars[cate].push(star)
+            }
+          }
+        }
+      }
+      commit({
+        type: 'setStars',
+        stars: stars
+      })
     },
     getCurrentList ({ state, commit }, tag) {
+      let list
+      if (tag === 'All') {
+        list = state.all
+      } else {
+        list = state.stars[tag]
+      }
       commit({
         type: 'setCurrentList',
-        stars: state.stars[tag]
+        stars: list
       })
     },
     getCurrentStar ({ state, commit }) {

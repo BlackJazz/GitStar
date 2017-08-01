@@ -14,8 +14,7 @@ export default {
   },
   methods: {
     login () {
-      window.localStorage.setItem('token', JSON.stringify(true))
-      this.$router.replace({ path: '/' })
+      window.location.replace('http://git-star.herokuapp.com/login')
     }
   }
 }

@@ -19,7 +19,7 @@
           <span>README.md</span>
         </p>
         <div class="box-read-content">
-          <vueMarkDown :source="this.md.body"></vueMarkDown>
+          <vueMarkDown :source="this.md.body" :breaks="false"></vueMarkDown>
         </div>
       </div>
     </div>

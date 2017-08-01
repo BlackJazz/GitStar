@@ -11,7 +11,7 @@
       </p>
       <p class="star-description">{{ each.description }}</p>
       <p class="star-info">
-        <span><i class="fa fa-user fa-1x"></i> {{ each.owner.login }}</span>
+        <span><i class="fa fa-user fa-1x"></i> {{ each.owner }}</span>
         <button class="star-rename"><i class="fa fa-edit fa-1x"></i></button>
       </p>
     </li>

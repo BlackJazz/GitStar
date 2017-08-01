@@ -1,8 +1,8 @@
 <template>
   <nav id="nav">
     <div class="user">
-      <img class="avatar" src="../assets/img/logo.png">
-      <span class="name">Inbeen</span>
+      <img class="avatar" :src="avatar">
+      <span class="name">{{ username }}</span>
       <p>
         <button class="quit" @click="logout()">Quit</button>
       </p>
@@ -13,13 +13,17 @@
     </button>
     <button class="title">Tags</button>
     <ul class="tag-list">
+      <li class="tag-item" @click="selectTag('All')" :class="{ 'tag-active': isActive === 'All' }">
+        <span class="tag-name">All</span>
+        <span class="tag-count">{{ all.length }}</span>
+      </li>
       <li class="tag-item"
           @click="selectTag(each)"
-          v-for="each of tags"
-          :key="each.id"
+          v-for="each of Object.keys(stars)"
+          :key="each"
           :class="{ 'tag-active': isActive === each }">
         <span class="tag-name">{{ each }}</span>
-        <span class="tag-count">6</span>
+        <span class="tag-count">{{ stars[each].length }}</span>
       </li>
     </ul>
     <p class="loading">Loading...</p>
@@ -38,13 +42,18 @@ export default {
   },
   computed: {
     ...mapState({
-      tags: state => state.star.tags
+      all: state => state.star.all,
+      stars: state => state.star.stars,
+      username: state => state.user.username,
+      avatar: state => state.user.avatar
     })
   },
   created () {
+    this.getUser()
+    this.getAll()
   },
   methods: {
-    ...mapActions(['getCurrentList']),
+    ...mapActions(['getCurrentList', 'getUser', 'getAll']),
     logout () {
       window.localStorage.removeItem('token')
       this.$router.replace({ path: '/login' })
