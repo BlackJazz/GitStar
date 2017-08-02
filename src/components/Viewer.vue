@@ -3,15 +3,14 @@
     <div class="box" v-if="!Object.is(star, null)">
       <div class="box-star">
         <p class="box-star-info">
-          <span>{{ star.title }}</span>
+          <span>{{ star.name }}</span>
           <span>
-            <i class="fa fa-user fa-1x"></i> {{ star.user }}
-            <i class="fa fa-star fa-1x"></i> {{ star.stars }}
+            <i class="fa fa-user fa-1x"></i> {{ star.owner }}
           </span>
         </p>
         <p class="box-star-description">{{ star.description }}</p>
         <ul class="box-star-tags">
-          <li><span class="box-star-tag">123</span></li>
+          <li v-for="each of star.categories"><span class="box-star-tag">each</span></li>
         </ul>
       </div>
       <div class="box-read">

@@ -1,18 +1,19 @@
 <template>
   <ul id="star-list" class="drag">
     <li class="star-item"
-        v-for="each of stars"
+        v-for="each of stars[tag]"
         :key="each.id"
         @click="selectStar(each.id)"
         :class="{ 'star-active': isActive === each.id }">
-      <p class="star-title">
-        <span class="star-alias">{{ each.name }}</span>
+      <p class="star-title" v-if="each.comment_name">
+        <span class="star-alias">{{ each.comment_name }}</span>
         <span class="star-name">{{ each.name }}</span>
       </p>
+      <p class="star-title" v-else><span class="star-alias">{{ each.name }}</span></p>
       <p class="star-description">{{ each.description }}</p>
       <p class="star-info">
         <span><i class="fa fa-user fa-1x"></i> {{ each.owner }}</span>
-        <button class="star-rename"><i class="fa fa-edit fa-1x"></i></button>
+        <button class="star-rename" @click="editStar(each.id)"><i class="fa fa-edit fa-1x"></i></button>
       </p>
     </li>
   </ul>
@@ -29,14 +30,20 @@ export default {
   },
   computed: {
     ...mapState({
-      stars: state => state.star.currentList
+      dialogbox: state => state.global.dialogbox,
+      stars: state => state.star.stars,
+      tag: state => state.star.currentList
     })
   },
   methods: {
-    ...mapActions(['getCurrentStar']),
+    ...mapActions(['getCurrentStar', 'getEditStar']),
     selectStar (id) {
       this.isActive = id
-      this.getCurrentStar()
+      this.getCurrentStar(id)
+    },
+    editStar (id) {
+      window.event.cancelBubble = true
+      this.getEditStar(id)
     }
   }
 }

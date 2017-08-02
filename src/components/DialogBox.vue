@@ -1,0 +1,128 @@
+<template>
+  <div class="dialog" v-if="dialogbox">
+    <div class="dialog-input">
+      <p class="alias"><input type="text" :value="star.comment_name" placeholder="Alias"></p>
+      <p class="origin"><input type="text" :value="star.name" placeholder="Origin" disabled="disabled"></p>
+      <p class="notes"><textarea rows="5" cols="50" :value="star.comment_description" placeholder="Notes"></textarea></p>
+      <ul class="tags">
+        <p class="title">
+          <input type="text" placeholder="Tag">
+          <button class="add-tag"><i class="fa fa-check-square fa-1x"></i></button>
+        </p>
+        <li v-for="each of star.categories">
+          <span class="tag">each</span>
+          <button class="delete-tag"><i class="fa fa-times fa-1x"></i></button>
+        </li>
+      </ul>
+    </div>
+    <p class="dialog-btn">
+      <button class="btn" @click="ok()">Ok</button>
+      <button class="btn" @click="cancel()">Cancel</button>
+    </p>
+  </div>
+</template>
+
+<script>
+import { mapState, mapMutations } from 'vuex'
+export default {
+  name: 'dialog',
+  computed: {
+    ...mapState({
+      dialogbox: state => state.global.dialogbox,
+      stars: state => state.star.stars,
+      id: state => state.star.editId
+    }),
+    star: function () {
+      for (let each of this.stars['All']) {
+        if (each.id === this.id) return each
+      }
+      return null
+    }
+  },
+  methods: {
+    ...mapMutations(['setDialogBox']),
+    ok () {
+      this.setDialogBox({dialogbox: false})
+    },
+    cancel () {
+      this.setDialogBox({dialogbox: false})
+    }
+  }
+}
+</script>
+
+<style scoped>
+.dialog{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: absolute;
+  z-index: 950;
+  background: white;
+  border-radius: 5px;
+  overflow: hidden;
+  left: calc(50% - 20rem);
+  top: calc(50% - 12rem);
+  width: 40rem;
+  box-shadow: 0 0 10px #666;
+}
+.dialog-input{
+  width: 80%;
+  margin-top: 1.5rem;
+}
+.alias, .origin{
+  display: flex;
+  align-items: center;
+  margin-top: .7rem;
+}
+p span{
+  width: 64px;
+}
+.notes{
+  display: flex;
+  align-items: flex-start;
+  margin-top: .7rem;
+}
+.tags{
+  margin-top: 1rem;
+}
+.tag{
+  border-radius: 1rem;
+  background: #ddd;
+  padding: 3px 10px;
+}
+.title{
+  display: flex;
+  align-items: center;
+  padding: .7rem 0;
+  border-top: 1px solid #ddd;
+}
+.dialog-btn{
+  margin: 1.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  width: 40%;
+}
+input, textarea{
+  border: 1px solid #aaa;
+  border-radius: 3px;
+  padding: 4px 8px;
+}
+.add-tag{
+  margin-left: 1rem;
+  color: green;
+  font-size: 1.3rem;
+}
+.delete-tag{
+  color: red;
+  font-size: 1.3rem;
+}
+.btn{
+  padding: .3rem 0;
+  width: 5rem;
+  background: #619fe6;
+  color: white;
+  font-size: .8rem;
+  border-radius: .5rem;
+}
+</style>

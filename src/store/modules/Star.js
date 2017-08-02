@@ -2,23 +2,23 @@ import http from '@/http'
 
 export default {
   state: {
-    all: [],
     stars: {},
-    currentList: [],
-    currentStar: null
+    currentList: 'All',
+    currentStar: null,
+    editId: null
   },
   mutations: {
-    setAll (state, payload) {
-      state.all = payload.all
-    },
     setStars (state, payload) {
       state.stars = payload.stars
     },
     setCurrentList (state, payload) {
-      state.currentList = payload.stars
+      state.currentList = payload.tag
     },
     setCurrentStar (state, payload) {
-      state.currentStar = payload.star
+      state.currentStar = payload.id
+    },
+    setEditId (state, payload) {
+      state.editId = payload.id
     }
   },
   actions: {
@@ -29,16 +29,9 @@ export default {
         url: 'https://git-star.herokuapp.com/repos',
         headers: { 'Authorization': 'TOKEN ' + JSON.parse(token) }
       })
-      commit({
-        type: 'setAll',
-        all: res.body
-      })
-      commit({
-        type: 'setCurrentList',
-        stars: res.body
-      })
-      let stars = { 'Uncategorized': [] }
+      let stars = { 'All': [], 'Uncategorized': [] }
       for (let star of res.body) {
+        stars['All'].push(star)
         if (star.categories.length === 0) {
           stars['Uncategorized'].push(star)
         } else {
@@ -56,29 +49,38 @@ export default {
         type: 'setStars',
         stars: stars
       })
+      commit({
+        type: 'setLoading',
+        loading: false
+      })
     },
-    getCurrentList ({ state, commit }, tag) {
-      let list
-      if (tag === 'All') {
-        list = state.all
-      } else {
-        list = state.stars[tag]
-      }
+    getCurrentList ({ commit }, tag) {
       commit({
         type: 'setCurrentList',
-        stars: list
+        tag: tag
       })
     },
-    getCurrentStar ({ state, commit }) {
+    getCurrentStar ({ state, commit }, id) {
+      let star
+      for (let each of state.stars['All']) {
+        if (each.id === id) star = each
+      }
       commit({
         type: 'setCurrentStar',
-        star: {
-          'title': 'This a title',
-          'user': 'User',
-          'stars': 123,
-          'description': 'This is a description!'
-        }
+        id: star
       })
+    },
+    getEditStar ({ commit }, id) {
+      commit({
+        type: 'setDialogBox',
+        dialogbox: true
+      })
+      commit({
+        type: 'setEditId',
+        id: id
+      })
+    },
+    addTag ({ commit }, id, tag) {
     }
   }
 }

@@ -13,10 +13,6 @@
     </button>
     <button class="title">Tags</button>
     <ul class="tag-list">
-      <li class="tag-item" @click="selectTag('All')" :class="{ 'tag-active': isActive === 'All' }">
-        <span class="tag-name">All</span>
-        <span class="tag-count">{{ all.length }}</span>
-      </li>
       <li class="tag-item"
           @click="selectTag(each)"
           v-for="each of Object.keys(stars)"
@@ -26,23 +22,26 @@
         <span class="tag-count">{{ stars[each].length }}</span>
       </li>
     </ul>
-    <p class="loading">Loading...</p>
+    <sync></sync>
   </nav>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import Sync from '@/components/Sync'
 
 export default {
   name: 'nav',
+  components: {
+    Sync
+  },
   data () {
     return {
-      isActive: ''
+      isActive: 'All'
     }
   },
   computed: {
     ...mapState({
-      all: state => state.star.all,
       stars: state => state.star.stars,
       username: state => state.user.username,
       avatar: state => state.user.avatar
@@ -152,8 +151,5 @@ export default {
 }
 .tag-count{
   font-size:0.9rem;
-}
-.loading{
-  padding: .5rem 0;
 }
 </style>

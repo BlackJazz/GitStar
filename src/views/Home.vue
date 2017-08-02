@@ -4,6 +4,9 @@
     <starList></starList>
     <resizeBar></resizeBar>
     <viewer></viewer>
+    <dialogBox></dialogBox>
+    <shadowLayer></shadowLayer>
+    <loading></loading>
   </div>
 </template>
 
@@ -12,13 +15,20 @@ import Navi from '@/components/Nav'
 import StarList from '@/components/StarList'
 import Viewer from '@/components/Viewer'
 import ResizeBar from '@/components/ResizeBar'
+import DialogBox from '@/components/DialogBox'
+import ShadowLayer from '@/components/ShadowLayer'
+import Loading from '@/components/Loading'
+
 export default {
   name: 'home',
   components: {
     Navi,
     StarList,
     Viewer,
-    ResizeBar
+    ResizeBar,
+    DialogBox,
+    ShadowLayer,
+    Loading
   }
 }
 </script>
@@ -27,6 +37,11 @@ export default {
 #container{
   display: flex;
   height: 100vh;
+}
+code{
+  font-size: .9rem;
+  padding: .1rem .5rem;
+  background-color: #f6f8fa;
 }
 blockquote{
   padding: 0 1em;
