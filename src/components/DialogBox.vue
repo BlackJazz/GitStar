@@ -6,7 +6,7 @@
       <p class="notes"><textarea rows="5" cols="50" id="description" :value="star.comment_description" placeholder="Notes"></textarea></p>
       <ul class="tags">
         <p class="title">
-          <input type="text" placeholder="Tag" v-model="tag">
+          <input type="text" @keyup.enter="addTag()" placeholder="Tag" v-model="tag">
           <button class="add-tag" @click="addTag()"><i class="fa fa-check-square fa-1x"></i></button>
         </p>
         <li v-for="each of star.categories" :key="each">
@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 export default {
   name: 'dialog',
   data () {
@@ -33,7 +33,7 @@ export default {
   },
   computed: {
     ...mapState({
-      dialogbox: state => state.global.dialogbox,
+      dialogbox: state => state.global.dialog,
       stars: state => state.star.stars,
       id: state => state.star.editId
     }),
@@ -45,8 +45,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations(['setDialogBox', 'addStarTag', 'deleteStarTag']),
-    ...mapActions(['doEditStar']),
+    ...mapActions(['editStar', 'addStarTag', 'deleteStarTag', 'setDialog']),
     addTag () {
       if (this.tag === '') return
       this.addStarTag({id: this.id, tag: this.tag})
@@ -58,11 +57,11 @@ export default {
     ok () {
       let starAlias = document.getElementById('alias').value
       let starDescription = document.getElementById('description').value
-      this.doEditStar({id: this.id, alias: starAlias, description: starDescription})
-      this.setDialogBox({dialogbox: false})
+      this.editStar({id: this.id, alias: starAlias, description: starDescription})
+      this.setDialog(false)
     },
     cancel () {
-      this.setDialogBox({dialogbox: false})
+      this.setDialog(false)
     }
   }
 }

@@ -1,18 +1,27 @@
+import * as types from '../mutation-types'
+
 export default {
   state: {
-    dialogbox: false,
+    dialog: false,
     sync: false,
     loading: true
   },
   mutations: {
-    setDialogBox (state, payload) {
-      state.dialogbox = payload.dialogbox
+    [types.SET_DIALOG] (state, payload) {
+      state.dialog = payload.dialog
     },
-    setSync (state, payload) {
+    [types.SET_SYNC] (state, payload) {
       state.sync = payload.sync
     },
-    setLoading (state, payload) {
+    [types.SET_LOADING] (state, payload) {
       state.loading = payload.loading
+    }
+  },
+  actions: {
+    setDialog ({ commit }, flag) {
+      commit(types.SET_DIALOG, {
+        dialog: flag
+      })
     }
   }
 }

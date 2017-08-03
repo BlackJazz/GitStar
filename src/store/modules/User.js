@@ -1,4 +1,5 @@
 import http from '@/http'
+import * as types from '../mutation-types'
 
 export default {
   state: {
@@ -7,7 +8,7 @@ export default {
     avatar: ''
   },
   mutations: {
-    setUser (state, payload) {
+    [types.SET_USER] (state, payload) {
       state.email = payload.user.email
       state.username = payload.user.username
       state.avatar = payload.user.avatar_link
@@ -15,14 +16,8 @@ export default {
   },
   actions: {
     async getUser ({ commit }) {
-      let token = window.localStorage.getItem('token')
-      let res = await http({
-        method: 'GET',
-        url: 'https://git-star.herokuapp.com/user',
-        headers: { 'Authorization': 'TOKEN ' + JSON.parse(token) }
-      })
-      commit({
-        type: 'setUser',
+      let res = await http.get('https://git-star.herokuapp.com/user')
+      commit(types.SET_USER, {
         user: res.body
       })
     }

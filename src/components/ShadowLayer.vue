@@ -9,7 +9,7 @@ export default {
   name: 'shadowlayer',
   computed: {
     ...mapState({
-      dialogbox: state => state.global.dialogbox
+      dialogbox: state => state.global.dialog
     })
   }
 }

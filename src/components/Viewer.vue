@@ -18,7 +18,11 @@
           <span>README.md</span>
         </p>
         <div class="box-read-content">
-          <vueMarkDown :source="this.md.body" :breaks="false"></vueMarkDown>
+          <vueMarkDown
+          :source="this.md.body"
+          :breaks="false"
+          :task-lists="false"
+          :anchorAttributes="{}"></vueMarkDown>
         </div>
       </div>
     </div>
@@ -99,10 +103,23 @@ export default {
   margin: 2rem auto;
 }
 .box-read-content{
-  line-height: 2rem;
+  line-height: 1.6rem;
   padding: 0.6rem 0;
 }
 .box-read-content div *{
-  margin-bottom: .5rem;
+  margin: 1rem 0;
+}
+.box-read-content div ul{
+  list-style: disc;
+}
+.box-read-content div li{
+  line-height: 1.5rem;
+  margin: .2rem 0 .2rem 1.5rem!important;
+}
+.box-read-content div a{
+  color: #0366d6;
+}
+.box-read-content div a:hover{
+  text-decoration: underline;
 }
 </style>

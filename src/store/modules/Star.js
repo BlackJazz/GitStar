@@ -1,4 +1,5 @@
 import http from '@/http'
+import * as types from '../mutation-types'
 import Vue from 'vue'
 
 export default {
@@ -9,19 +10,19 @@ export default {
     editId: null
   },
   mutations: {
-    setStars (state, payload) {
+    [types.GET_ALL] (state, payload) {
       state.stars = payload.stars
     },
-    setCurrentList (state, payload) {
+    [types.SET_CURRENT_LIST] (state, payload) {
       state.currentList = payload.tag
     },
-    setCurrentStar (state, payload) {
+    [types.SET_CURRENT_STAR] (state, payload) {
       state.currentStar = payload.id
     },
-    setEditId (state, payload) {
+    [types.SET_EDIT_ID] (state, payload) {
       state.editId = payload.id
     },
-    EditStar (state, payload) {
+    [types.EDIT_STAR] (state, payload) {
       for (let each of state.stars['All']) {
         if (each.id === payload.id) {
           each.comment_name = payload.alias
@@ -29,7 +30,7 @@ export default {
         }
       }
     },
-    addStarTag (state, payload) {
+    [types.ADD_CATEGORY] (state, payload) {
       let tag = payload.tag
       for (let each of state.stars['All']) {
         if (each.id === payload.id) {
@@ -47,7 +48,7 @@ export default {
         }
       }
     },
-    deleteStarTag (state, payload) {
+    [types.DELETE_CATEGORY] (state, payload) {
       let tag = payload.tag
       for (let each of state.stars['All']) {
         if (each.id === payload.id) {
@@ -82,18 +83,15 @@ export default {
           }
         }
       }
-      commit({
-        type: 'setStars',
+      commit(types.GET_ALL, {
         stars: stars
       })
-      commit({
-        type: 'setLoading',
+      commit(types.SET_LOADING, {
         loading: false
       })
     },
     getCurrentList ({ commit }, tag) {
-      commit({
-        type: 'setCurrentList',
+      commit(types.SET_CURRENT_LIST, {
         tag: tag
       })
     },
@@ -102,27 +100,53 @@ export default {
       for (let each of state.stars['All']) {
         if (each.id === id) star = each
       }
-      commit({
-        type: 'setCurrentStar',
+      commit(types.SET_CURRENT_STAR, {
         id: star
       })
     },
     getEditId ({ commit }, id) {
-      commit({
-        type: 'setDialogBox',
+      commit(types.SET_DIALOG, {
         dialogbox: true
       })
-      commit({
-        type: 'setEditId',
+      commit(types.SET_EDIT_ID, {
         id: id
       })
     },
-    doEditStar ({ commit }, star) {
-      commit({
-        type: 'EditStar',
-        id: star.id,
-        alias: star.alias,
-        description: star.description
+    async editStar ({ commit }, star) {
+      let { id, alias, description } = star
+      let data = { 'name': alias, 'description': description }
+      await http.patch(`https://git-star.herokuapp.com/repos/${id}`, data).then((response) => {
+        if (response.status === 200) {
+          commit(types.EDIT_STAR, {
+            id: id,
+            alias: alias,
+            description: description
+          })
+        } else return
+      })
+    },
+    async addStarTag ({ commit }, star) {
+      let { id, tag } = star
+      let data = { category: tag }
+      await http.post(`https://git-star.herokuapp.com/repos/${id}/cates`, {body: data}).then((response) => {
+        if (response.status === 200) {
+          commit(types.ADD_CATEGORY, {
+            id: id,
+            tag: tag
+          })
+        } else return
+      })
+    },
+    async deleteStarTag ({ commit }, star) {
+      let { id, tag } = star
+      let data = { category: tag }
+      await http.delete(`https://git-star.herokuapp.com/repos/${id}/cates`, data).then((response) => {
+        if (response.status === 200) {
+          commit(types.DELETE_CATEGORY, {
+            id: id,
+            tag: tag
+          })
+        } else return
       })
     }
   }
