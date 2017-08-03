@@ -1,4 +1,5 @@
 import http from '@/http'
+import Vue from 'vue'
 
 export default {
   state: {
@@ -19,6 +20,39 @@ export default {
     },
     setEditId (state, payload) {
       state.editId = payload.id
+    },
+    addStarTag (state, payload) {
+      let tag = payload.tag
+      for (let each of state.stars['All']) {
+        if (each.id === payload.id) {
+          if (each.categories.includes(tag)) return
+          else each.categories.push(tag)
+          if (Object.keys(state.stars).includes(tag)) {
+            state.stars[tag].push(each)
+          } else {
+            Vue.set(state.stars, tag, [])
+            state.stars[tag].push(each)
+          }
+          let i = state.stars['Uncategorized'].findIndex((x) => x.id === each.id)
+          if (i === 0) state.stars['Uncategorized'].shift()
+          if (i > 0) state.stars['Uncategorized'].splice(i, i)
+        }
+      }
+    },
+    deleteStarTag (state, payload) {
+      let tag = payload.tag
+      for (let each of state.stars['All']) {
+        if (each.id === payload.id) {
+          let i = each.categories.findIndex((x) => x === payload.tag)
+          if (i === 0) each.categories.shift()
+          if (i > 0) each.categories.splice(i, i)
+          if (each.categories.length === 0) state.stars['Uncategorized'].push(each)
+          let j = state.stars[tag].findIndex((x) => x.id === each.id)
+          if (j === 0) state.stars[tag].shift()
+          if (j > 0) state.stars[tag].splice(i, i)
+          if (state.stars[tag].length === 0) Vue.delete(state.stars, tag)
+        }
+      }
     }
   },
   actions: {
@@ -39,7 +73,7 @@ export default {
             if (Object.keys(stars).includes(cate)) {
               stars[cate].push(star)
             } else {
-              Object.assign(stars, { cate: [] })
+              Vue.set(stars, cate, [])
               stars[cate].push(star)
             }
           }
@@ -79,8 +113,6 @@ export default {
         type: 'setEditId',
         id: id
       })
-    },
-    addTag ({ commit }, id, tag) {
     }
   }
 }
