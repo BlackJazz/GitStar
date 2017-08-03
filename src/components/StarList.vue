@@ -30,7 +30,7 @@ export default {
   },
   computed: {
     ...mapState({
-      dialogbox: state => state.global.dialogbox,
+      dialogbox: state => state.global.dialog,
       stars: state => state.star.stars,
       tag: state => state.star.currentList
     })

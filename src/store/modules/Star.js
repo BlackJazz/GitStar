@@ -56,6 +56,7 @@ export default {
           if (i === 0) each.categories.shift()
           if (i > 0) each.categories.splice(i, i)
           if (each.categories.length === 0) state.stars['Uncategorized'].push(each)
+          //
           let j = state.stars[tag].findIndex((x) => x.id === each.id)
           if (j === 0) state.stars[tag].shift()
           if (j > 0) state.stars[tag].splice(i, i)
@@ -106,7 +107,7 @@ export default {
     },
     getEditId ({ commit }, id) {
       commit(types.SET_DIALOG, {
-        dialogbox: true
+        dialog: true
       })
       commit(types.SET_EDIT_ID, {
         id: id
@@ -128,7 +129,7 @@ export default {
     async addStarTag ({ commit }, star) {
       let { id, tag } = star
       let data = { category: tag }
-      await http.post(`https://git-star.herokuapp.com/repos/${id}/cates`, {body: data}).then((response) => {
+      await http.post(`https://git-star.herokuapp.com/repos/${id}/cates`, data).then((response) => {
         if (response.status === 200) {
           commit(types.ADD_CATEGORY, {
             id: id,
@@ -140,7 +141,7 @@ export default {
     async deleteStarTag ({ commit }, star) {
       let { id, tag } = star
       let data = { category: tag }
-      await http.delete(`https://git-star.herokuapp.com/repos/${id}/cates`, data).then((response) => {
+      await http.delete(`https://git-star.herokuapp.com/repos/${id}/cates`, { body: data }).then((response) => {
         if (response.status === 200) {
           commit(types.DELETE_CATEGORY, {
             id: id,
