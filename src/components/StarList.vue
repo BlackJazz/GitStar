@@ -36,14 +36,14 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['getCurrentStar', 'getEditStar']),
+    ...mapActions(['getCurrentStar', 'getEditId']),
     selectStar (id) {
       this.isActive = id
       this.getCurrentStar(id)
     },
     editStar (id) {
       window.event.cancelBubble = true
-      this.getEditStar(id)
+      this.getEditId(id)
     }
   }
 }

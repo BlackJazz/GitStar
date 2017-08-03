@@ -21,6 +21,14 @@ export default {
     setEditId (state, payload) {
       state.editId = payload.id
     },
+    EditStar (state, payload) {
+      for (let each of state.stars['All']) {
+        if (each.id === payload.id) {
+          each.comment_name = payload.alias
+          each.comment_description = payload.description
+        }
+      }
+    },
     addStarTag (state, payload) {
       let tag = payload.tag
       for (let each of state.stars['All']) {
@@ -104,7 +112,7 @@ export default {
         id: star
       })
     },
-    getEditStar ({ commit }, id) {
+    getEditId ({ commit }, id) {
       commit({
         type: 'setDialogBox',
         dialogbox: true
@@ -112,6 +120,14 @@ export default {
       commit({
         type: 'setEditId',
         id: id
+      })
+    },
+    doEditStar ({ commit }, star) {
+      commit({
+        type: 'EditStar',
+        id: star.id,
+        alias: star.alias,
+        description: star.description
       })
     }
   }

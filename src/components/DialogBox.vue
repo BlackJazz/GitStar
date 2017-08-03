@@ -1,15 +1,15 @@
 <template>
   <div class="dialog" v-if="dialogbox">
     <div class="dialog-input">
-      <p class="alias"><input type="text" v-model="star.comment_name" placeholder="Alias"></p>
-      <p class="origin"><input type="text" v-model="star.name" placeholder="Origin" disabled="disabled"></p>
-      <p class="notes"><textarea rows="5" cols="50" v-model="star.comment_description" placeholder="Notes"></textarea></p>
+      <p class="alias"><input type="text" v-model="star_alias" placeholder="Alias"></p>
+      <p class="origin"><input type="text" :value="star.name" disabled="disabled"></p>
+      <p class="notes"><textarea rows="5" cols="50" v-model="star_description" placeholder="Notes"></textarea></p>
       <ul class="tags">
         <p class="title">
           <input type="text" placeholder="Tag" v-model="tag">
           <button class="add-tag" @click="addTag()"><i class="fa fa-check-square fa-1x"></i></button>
         </p>
-        <li v-for="each of star.categories">
+        <li v-for="each of star.categories" :key="each">
           <span class="tag">{{ each }}</span>
           <button class="delete-tag" @click="deleteTag(each)"><i class="fa fa-times fa-1x"></i></button>
         </li>
@@ -23,12 +23,14 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 export default {
   name: 'dialog',
   data () {
     return {
-      tag: ''
+      tag: '',
+      star_alias: '',
+      star_description: ''
     }
   },
   computed: {
@@ -42,10 +44,14 @@ export default {
         if (each.id === this.id) return each
       }
       return null
+    },
+    star_alias: function () {
+      return this.star.comment_name
     }
   },
   methods: {
     ...mapMutations(['setDialogBox', 'addStarTag', 'deleteStarTag']),
+    ...mapActions(['doEditStar']),
     addTag () {
       if (this.tag === '') return
       this.addStarTag({id: this.id, tag: this.tag})
@@ -55,6 +61,7 @@ export default {
       this.deleteStarTag({id: this.id, tag: each})
     },
     ok () {
+      this.doEditStar({id: this.id, alias: this.star_alias, description: this.star_description})
       this.setDialogBox({dialogbox: false})
     },
     cancel () {
