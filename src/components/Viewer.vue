@@ -50,7 +50,10 @@ export default {
   },
   methods: {
     async getMarkDown () {
-      this.md = await http.get('https://raw.githubusercontent.com/miaolz123/vue-markdown/master/README.md')
+      this.md = await http({
+        method: 'GET',
+        url: 'https://raw.githubusercontent.com/miaolz123/vue-markdown/master/README.md'
+      })
     }
   }
 }

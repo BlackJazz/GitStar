@@ -65,12 +65,7 @@ export default {
   },
   actions: {
     async getAll ({ commit }) {
-      let token = window.localStorage.getItem('token')
-      let res = await http({
-        method: 'GET',
-        url: 'https://git-star.herokuapp.com/repos',
-        headers: { 'Authorization': 'TOKEN ' + JSON.parse(token) }
-      })
+      let res = await http.get('https://git-star.herokuapp.com/repos')
       let stars = { 'All': [], 'Uncategorized': [] }
       for (let star of res.body) {
         stars['All'].push(star)

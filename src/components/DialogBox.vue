@@ -1,9 +1,9 @@
 <template>
   <div class="dialog" v-if="dialogbox">
     <div class="dialog-input">
-      <p class="alias"><input type="text" v-model="star_alias" placeholder="Alias"></p>
+      <p class="alias"><input type="text" id="alias" :value="star.comment_name" placeholder="Alias"></p>
       <p class="origin"><input type="text" :value="star.name" disabled="disabled"></p>
-      <p class="notes"><textarea rows="5" cols="50" v-model="star_description" placeholder="Notes"></textarea></p>
+      <p class="notes"><textarea rows="5" cols="50" id="description" :value="star.comment_description" placeholder="Notes"></textarea></p>
       <ul class="tags">
         <p class="title">
           <input type="text" placeholder="Tag" v-model="tag">
@@ -28,9 +28,7 @@ export default {
   name: 'dialog',
   data () {
     return {
-      tag: '',
-      star_alias: '',
-      star_description: ''
+      tag: ''
     }
   },
   computed: {
@@ -44,9 +42,6 @@ export default {
         if (each.id === this.id) return each
       }
       return null
-    },
-    star_alias: function () {
-      return this.star.comment_name
     }
   },
   methods: {
@@ -61,7 +56,9 @@ export default {
       this.deleteStarTag({id: this.id, tag: each})
     },
     ok () {
-      this.doEditStar({id: this.id, alias: this.star_alias, description: this.star_description})
+      let starAlias = document.getElementById('alias').value
+      let starDescription = document.getElementById('description').value
+      this.doEditStar({id: this.id, alias: starAlias, description: starDescription})
       this.setDialogBox({dialogbox: false})
     },
     cancel () {
