@@ -6,6 +6,7 @@ export default {
   state: {
     stars: {},
     currentList: 'All',
+    mdList: [],
     currentStar: null,
     editId: null,
     sync: false
@@ -35,8 +36,14 @@ export default {
     [types.SET_CURRENT_LIST] (state, payload) {
       state.currentList = payload.tag
     },
+    [types.ADD_MD_LIST] (state, payload) {
+      state.mdList.push(payload)
+    },
+    [types.EDIT_MD_LIST] (state, payload) {
+      state.mdList[payload.index].md = payload.md
+    },
     [types.SET_CURRENT_STAR] (state, payload) {
-      state.currentStar = payload.id
+      state.currentStar = payload.star
     },
     [types.SET_EDIT_ID] (state, payload) {
       state.editId = payload.id
@@ -121,14 +128,46 @@ export default {
         tag: tag
       })
     },
-    getCurrentStar ({ state, commit }, id) {
-      let star
+    async getCurrentStar ({ state, commit }, id) {
       for (let each of state.stars['All']) {
-        if (each.id === id) star = each
+        if (each.id === id) {
+          commit(types.SET_CURRENT_STAR, {
+            star: each
+          })
+          break
+        }
       }
-      commit(types.SET_CURRENT_STAR, {
-        id: star
-      })
+      let md
+      try {
+        let repo = await http.get(`https://git-star.herokuapp.com/repos/${id}`)
+        md = await http.get(repo.body.readme.url)
+      } catch (e) {
+        md = ''
+      }
+      if (state.mdList.length === 0) {
+        commit(types.ADD_MD_LIST, {
+          id: id,
+          md: md.body
+        })
+        return
+      }
+      for (let [index, value] of state.mdList.entries()) {
+        if (value.id === id) {
+          if (md.body !== '') {
+            commit(types.EDIT_MD_LIST, {
+              index: index,
+              md: md.body
+            })
+          }
+          break
+        }
+        if (index === state.mdList.length - 1) {
+          commit(types.ADD_MD_LIST, {
+            id: id,
+            md: md.body
+          })
+        }
+      }
     },
     getEditId ({ commit }, id) {
       commit(types.SET_DIALOG, {
@@ -190,7 +229,6 @@ export default {
       })
     },
     async syncAll ({ state, commit }) {
-      console.log(state.sync)
       if (!state.sync) return
       commit(types.SET_STATUS_CODE, { code: 2 })
       try {

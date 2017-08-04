@@ -19,7 +19,7 @@
         </p>
         <div class="box-read-content">
           <vueMarkDown
-          :source="this.md.body"
+          :source="this.md"
           :breaks="false"
           :task-lists="false"
           :anchorAttributes="{}"></vueMarkDown>
@@ -32,33 +32,29 @@
 <script>
 import { mapState } from 'vuex'
 import VueMarkDown from 'vue-markdown'
-import http from '@/http'
 
 export default {
   name: 'viewer',
   data () {
     return {
-      md: ''
     }
-  },
-  created () {
-    this.getMarkDown()
   },
   components: {
     VueMarkDown
   },
   computed: {
     ...mapState({
-      star: store => store.star.currentStar
-    })
+      star: state => state.star.currentStar,
+      mdList: state => state.star.mdList
+    }),
+    md: function () {
+      for (let each of this.mdList) {
+        if (this.star.id === each.id) return each.md
+      }
+      return ''
+    }
   },
   methods: {
-    async getMarkDown () {
-      this.md = await http({
-        method: 'GET',
-        url: 'https://raw.githubusercontent.com/miaolz123/vue-markdown/master/README.md'
-      })
-    }
   }
 }
 </script>

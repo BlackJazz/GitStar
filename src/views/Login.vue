@@ -26,6 +26,7 @@ export default {
   },
   beforeRouteEnter (to, from, next) {
     let token = window.localStorage.getItem('token')
+    console.log(JSON.parse(token))
     if (token) {
       http.get('http://git-star.herokuapp.com/stats')
           .then(
