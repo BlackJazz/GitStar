@@ -1,7 +1,10 @@
 <template>
   <div class="loading" v-if="loading">
     <span class="loading-shift"><i class="fa fa-spinner fa-5x"></i></span>
-    <span class="loading-text">Getting data from the server.<br>Please wait for a moment.</span>
+    <span class="loading-text">
+      Please wait for getting data.<br>
+      Refresh if over 30s.
+    </span>
   </div>
 </template>
 

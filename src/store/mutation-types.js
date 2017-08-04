@@ -2,6 +2,9 @@
 export const SET_DIALOG = 'SET_DIALOG'
 export const SET_SYNC = 'SET_SYNC'
 export const SET_LOADING = 'SET_LOADING'
+export const ADD_TIP = 'ADD_TIP'
+export const DELETE_TIP = 'DELETE_TIP'
+export const SET_TIP = 'SET_TIP'
 
 // Star
 export const GET_ALL = 'GET_ALL'

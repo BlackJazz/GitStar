@@ -7,6 +7,7 @@
     <dialogBox></dialogBox>
     <shadowLayer></shadowLayer>
     <loading></loading>
+    <tips></tips>
   </div>
 </template>
 
@@ -18,6 +19,7 @@ import ResizeBar from '@/components/ResizeBar'
 import DialogBox from '@/components/DialogBox'
 import ShadowLayer from '@/components/ShadowLayer'
 import Loading from '@/components/Loading'
+import Tips from '@/components/Tips'
 
 export default {
   name: 'home',
@@ -28,7 +30,8 @@ export default {
     ResizeBar,
     DialogBox,
     ShadowLayer,
-    Loading
+    Loading,
+    Tips
   }
 }
 </script>

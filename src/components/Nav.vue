@@ -11,7 +11,7 @@
       <i class="fa fa-search fa-1x"></i>
       <input class="input" type="text" placeholder="">
     </button>
-    <button class="title">Tags</button>
+    <button class="title" @click="clickTip()">Tags</button>
     <ul class="tag-list">
       <li class="tag-item"
           @click="selectTag(each)"

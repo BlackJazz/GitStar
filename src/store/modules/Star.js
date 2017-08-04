@@ -44,7 +44,7 @@ export default {
           }
           let i = state.stars['Uncategorized'].findIndex((x) => x.id === each.id)
           if (i === 0) state.stars['Uncategorized'].shift()
-          if (i > 0) state.stars['Uncategorized'].splice(i, i)
+          if (i > 0) state.stars['Uncategorized'].splice(i, 1)
         }
       }
     },
@@ -54,12 +54,12 @@ export default {
         if (each.id === payload.id) {
           let i = each.categories.findIndex((x) => x === payload.tag)
           if (i === 0) each.categories.shift()
-          if (i > 0) each.categories.splice(i, i)
+          if (i > 0) each.categories.splice(i, 1)
           if (each.categories.length === 0) state.stars['Uncategorized'].push(each)
           //
           let j = state.stars[tag].findIndex((x) => x.id === each.id)
           if (j === 0) state.stars[tag].shift()
-          if (j > 0) state.stars[tag].splice(i, i)
+          if (j > 0) state.stars[tag].splice(i, 1)
           if (state.stars[tag].length === 0) Vue.delete(state.stars, tag)
         }
       }
@@ -113,7 +113,7 @@ export default {
         id: id
       })
     },
-    async editStar ({ commit }, star) {
+    async editStar ({ dispatch, commit }, star) {
       let { id, alias, description } = star
       let data = { 'name': alias, 'description': description }
       await http.patch(`https://git-star.herokuapp.com/repos/${id}`, data).then((response) => {
@@ -123,10 +123,13 @@ export default {
             alias: alias,
             description: description
           })
-        } else return
+          dispatch('addTip', {type: 'info', info: 'INFO: Edit successful!'}).then(() => {})
+        } else {
+          dispatch('addTip', {type: 'error', info: 'ERROR: Failed to edit!'}).then(() => {})
+        }
       })
     },
-    async addStarTag ({ commit }, star) {
+    async addStarTag ({ dispatch, commit }, star) {
       let { id, tag } = star
       let data = { category: tag }
       await http.post(`https://git-star.herokuapp.com/repos/${id}/cates`, data).then((response) => {
@@ -135,10 +138,13 @@ export default {
             id: id,
             tag: tag
           })
-        } else return
+          dispatch('addTip', {type: 'info', info: 'INFO: Add tag successful!'}).then(() => {})
+        } else {
+          dispatch('addTip', {type: 'error', info: 'ERROR: Failed to add tag!'}).then(() => {})
+        }
       })
     },
-    async deleteStarTag ({ commit }, star) {
+    async deleteStarTag ({ dispatch, commit }, star) {
       let { id, tag } = star
       let data = { category: tag }
       await http.delete(`https://git-star.herokuapp.com/repos/${id}/cates`, { body: data }).then((response) => {
@@ -147,7 +153,10 @@ export default {
             id: id,
             tag: tag
           })
-        } else return
+          dispatch('addTip', {type: 'info', info: 'INFO: Delete tag successful!'}).then(() => {})
+        } else {
+          dispatch('addTip', {type: 'error', info: 'ERROR: Failed to delete tag!'}).then(() => {})
+        }
       })
     }
   }
