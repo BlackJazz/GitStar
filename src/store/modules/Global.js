@@ -3,7 +3,14 @@ import * as types from '../mutation-types'
 export default {
   state: {
     dialog: false,
-    sync: false,
+    statusCode: 0,
+    statusInfo: [
+      'Online',
+      'Offline',
+      'Sync',
+      'Completed',
+      'Failed'
+    ],
     loading: true,
     tips: [],
     tipNum: 0
@@ -11,9 +18,6 @@ export default {
   mutations: {
     [types.SET_DIALOG] (state, payload) {
       state.dialog = payload.dialog
-    },
-    [types.SET_SYNC] (state, payload) {
-      state.sync = payload.sync
     },
     [types.SET_LOADING] (state, payload) {
       state.loading = payload.loading
@@ -35,6 +39,9 @@ export default {
     },
     [types.SET_TIP] (state, payload) {
       state.tips[payload.i] = payload.is
+    },
+    [types.SET_STATUS_CODE] (state, payload) {
+      state.statusCode = payload.code
     }
   },
   actions: {

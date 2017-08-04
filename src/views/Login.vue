@@ -6,13 +6,19 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: 'login',
   data () {
     return {
     }
   },
+  created () {
+    this.setSync(false)
+  },
   methods: {
+    ...mapActions(['setSync']),
     login () {
       window.location.replace('http://git-star.herokuapp.com/login')
     }

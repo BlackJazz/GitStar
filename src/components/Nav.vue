@@ -22,18 +22,18 @@
         <span class="tag-count">{{ stars[each].length }}</span>
       </li>
     </ul>
-    <sync></sync>
+    <statuss></statuss>
   </nav>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import Sync from '@/components/Sync'
+import Statuss from '@/components/Statuss'
 
 export default {
   name: 'nav',
   components: {
-    Sync
+    Statuss
   },
   data () {
     return {

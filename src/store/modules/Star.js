@@ -7,11 +7,30 @@ export default {
     stars: {},
     currentList: 'All',
     currentStar: null,
-    editId: null
+    editId: null,
+    sync: false
   },
   mutations: {
     [types.GET_ALL] (state, payload) {
       state.stars = payload.stars
+    },
+    [types.ADD_STAR] (state, payload) {
+      let star = payload.star
+      state.stars['All'].push(star)
+      state.stars['Uncategorized'].push(star)
+    },
+    [types.DELETE_STAR] (state, payload) {
+      let id = payload.id
+      for (let tag of Object.keys(state.stars)) {
+        for (let each of state.stars[tag]) {
+          if (each.id === id) {
+            let i = state.stars[tag].findIndex((x) => x.id === each.id)
+            if (i === 0) state.stars[tag].shift()
+            if (i > 0) state.stars[tag].splice(i, 1)
+            if (state.stars[tag].length === 0) Vue.delete(state.stars, tag)
+          }
+        }
+      }
     },
     [types.SET_CURRENT_LIST] (state, payload) {
       state.currentList = payload.tag
@@ -63,6 +82,9 @@ export default {
           if (state.stars[tag].length === 0) Vue.delete(state.stars, tag)
         }
       }
+    },
+    [types.SET_SYNC] (state, payload) {
+      state.sync = payload.sync
     }
   },
   actions: {
@@ -89,6 +111,9 @@ export default {
       })
       commit(types.SET_LOADING, {
         loading: false
+      })
+      commit(types.SET_SYNC, {
+        sync: true
       })
     },
     getCurrentList ({ commit }, tag) {
@@ -158,6 +183,41 @@ export default {
           dispatch('addTip', {type: 'error', info: 'ERROR: Failed to delete tag!'}).then(() => {})
         }
       })
+    },
+    setSync ({ commit }, flag) {
+      commit(types.SET_SYNC, {
+        sync: flag
+      })
+    },
+    async syncAll ({ state, commit }) {
+      console.log(state.sync)
+      if (!state.sync) return
+      commit(types.SET_STATUS_CODE, { code: 2 })
+      try {
+        let res = await http.get('https://git-star.herokuapp.com/repos')
+        let al = new Set()
+        let dl = new Set()
+        for (let a of res.body) {
+          al.add(a.id)
+        }
+        for (let d of state.stars['All']) {
+          dl.add(d.id)
+        }
+        let intersect = new Set([...al].filter(x => dl.has(x)))
+        let alist = new Set([...al].filter(x => !intersect.has(x)))
+        let dlist = new Set([...dl].filter(x => !intersect.has(x)))
+        for (let add of res.body) {
+          for (let ai of alist) {
+            if (ai === add.id) commit(types.ADD_STAR, {star: add})
+          }
+        }
+        for (let del of dlist) {
+          commit(types.DELETE_STAR, {id: del})
+        }
+        commit(types.SET_STATUS_CODE, { code: 3 })
+      } catch (e) {
+        commit(types.SET_STATUS_CODE, { code: 4 })
+      }
     }
   }
 }
