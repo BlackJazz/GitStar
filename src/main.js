@@ -7,15 +7,11 @@ Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
   if (to.matched.some(route => route.meta.requireAuth)) {
-    let token = window.localStorage.getItem('token')
-    let isLogin = JSON.parse(token)
-    if (isLogin) {
+    let token = JSON.parse(window.localStorage.getItem('token'))
+    if (token) {
       next()
     } else {
-      next({
-        path: '/',
-        query: { redirect: to.fullPath }
-      })
+      next({path: '/'})
     }
   } else next()
 })

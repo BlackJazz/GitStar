@@ -7,6 +7,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import http from '@/http'
 
 export default {
   name: 'login',
@@ -26,7 +27,20 @@ export default {
   beforeRouteEnter (to, from, next) {
     let token = window.localStorage.getItem('token')
     if (token) {
-      next({ path: '/home' })
+      http.get('http://git-star.herokuapp.com/stats')
+          .then(
+            (response) => {
+              if (response.body === '1') next({ path: '/home' })
+              else {
+                window.localStorage.clear()
+                next()
+              }
+            },
+            (e) => {
+              window.localStorage.clear()
+              next()
+            }
+          )
     } else next()
   }
 }
