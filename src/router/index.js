@@ -11,7 +11,7 @@ export default new Router({
   base: '/',
   routes: [
     {
-      path: '/',
+      path: '/home',
       name: 'Home',
       component: Home,
       meta: { requireAuth: true }
@@ -22,7 +22,7 @@ export default new Router({
       component: Oauth
     },
     {
-      path: '/login',
+      path: '/',
       name: 'Login',
       component: Login
     }

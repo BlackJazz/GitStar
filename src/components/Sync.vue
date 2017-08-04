@@ -2,7 +2,7 @@
   <div class="sync">
     <span class="sync-shift" v-if="sync"><i class="fa fa-spinner fa-1x"></i></span>
     <span class="sync-static" v-else><i class="fa fa-check-circle fa-1x"></i></span>
-    <span class="sync-text" v-if="sync">Sync...</span>
+    <span class="sync-text" v-if="sync">Sync</span>
     <span class="sync-text" v-else>Completed</span>
   </div>
 </template>

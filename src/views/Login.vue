@@ -16,6 +16,12 @@ export default {
     login () {
       window.location.replace('http://git-star.herokuapp.com/login')
     }
+  },
+  beforeRouteEnter (to, from, next) {
+    let token = window.localStorage.getItem('token')
+    if (token) {
+      next({ path: '/home' })
+    } else next()
   }
 }
 </script>

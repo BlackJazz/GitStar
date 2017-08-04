@@ -55,7 +55,7 @@ export default {
     ...mapActions(['getCurrentList', 'getUser', 'getAll']),
     logout () {
       window.localStorage.removeItem('token')
-      this.$router.replace({ path: '/login' })
+      this.$router.replace({ path: '/' })
     },
     selectTag (tag) {
       this.isActive = tag

@@ -6,7 +6,7 @@ Vue.use(VueResource)
 Vue.http.interceptors.push((request, next) => {
   let token = JSON.parse(window.localStorage.getItem('token'))
   if (token) {} else {
-    Vue.$router.replace({ path: '/login' })
+    Vue.$router.replace({ path: '/' })
     return
   }
   if (request.url !== 'https://raw.githubusercontent.com/miaolz123/vue-markdown/master/README.md') {
@@ -15,7 +15,7 @@ Vue.http.interceptors.push((request, next) => {
   next((response) => {
     if (response.status === 401) {
       window.localStorage.clear()
-      Vue.$router.replace({ path: '/login' })
+      Vue.$router.replace({ path: '/' })
       return
     }
     return response

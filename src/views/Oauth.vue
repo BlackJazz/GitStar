@@ -7,9 +7,9 @@ export default {
     let token = this.$route.query.token
     if (token) {
       window.localStorage.setItem('token', JSON.stringify(token))
-      this.$router.replace({ path: '/' })
+      this.$router.replace({ path: '/home' })
     } else {
-      this.$router.replace({ path: '/login' })
+      this.$router.replace({ path: '/' })
     }
   }
 }
