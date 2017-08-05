@@ -68,9 +68,9 @@ export default {
   flex: 1;
   overflow: auto;
 }
-#viewer::-webkit-scrollbar{width: 6px; background: #ddd;}
+#viewer::-webkit-scrollbar{width: 6px;}
 #viewer::-webkit-scrollbar-button{display: none;}
-#viewer::-webkit-scrollbar-thumb{background: #5b6875;border-radius: 3px;}
+#viewer::-webkit-scrollbar-thumb{background: #69d6cf;border-radius: 3px;}
 #viewer::-webkit-scrollbar-corner{display: none;}
 .box{
   overflow: hidden;
@@ -85,7 +85,7 @@ export default {
   margin-bottom: .5rem;
 }
 .box-star-name, .box-star-owner{
-  color: #0366d6;
+  color: #5195F1;
 }
 .box-star-owner{
   margin-left: .5rem;
@@ -120,7 +120,7 @@ export default {
   line-height: 1.6rem;
   padding: 0.6rem 0;
 }
-.box-read-content div *{
+.box-read-content div > *{
   margin: 1rem 0;
 }
 .box-read-content div ul{
@@ -131,7 +131,7 @@ export default {
   margin: .2rem 0 .2rem 1.5rem!important;
 }
 .box-read-content div a{
-  color: #0366d6;
+  color: #5195F1;
 }
 .box-read-content div a:hover{
   text-decoration: underline;

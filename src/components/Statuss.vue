@@ -4,6 +4,7 @@
     <span class="sync-static" v-if="status === 1"><i class="fa fa-unlink fa-1x"></i></span>
     <span class="sync-shift" v-if="status === 2"><i class="fa fa-spinner fa-1x"></i></span>
     <span class="sync-static" v-if="status === 3"><i class="fa fa-check-circle fa-1x"></i></span>
+    <span class="sync-static" v-if="status === 4"><i class="fa fa-warning fa-1x"></i></span>
     <span class="sync-text">{{ info[status] }}</span>
   </div>
 </template>
@@ -32,6 +33,7 @@ export default {
 
 <style scoped>
 .status{
+  font-size: .9em;
   display: flex;
   justify-content: center;
   width: 100%;

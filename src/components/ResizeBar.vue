@@ -11,9 +11,10 @@ export default {
 
 <style scoped>
 #resizebar{
-  width: 0;
-  border-left: 1px solid #ccc;
-  border-right: 1px solid #ccc;
+  width: 1px;
+  background: #69d6cf;
+  border-left: 1px solid #e8fffd;
+  border-right: 1px solid #fff;
 }
 #resizebar:hover{
   cursor: e-resize;

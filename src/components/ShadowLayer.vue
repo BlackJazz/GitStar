@@ -1,9 +1,9 @@
 <template>
-  <div class="shadow" v-if="dialogbox"></div>
+  <div class="shadow" v-if="dialogbox" @click="setDialog(false)"></div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'shadowlayer',
@@ -11,6 +11,9 @@ export default {
     ...mapState({
       dialogbox: state => state.global.dialog
     })
+  },
+  methods: {
+    ...mapActions(['setDialog'])
   }
 }
 </script>

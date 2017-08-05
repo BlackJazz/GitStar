@@ -66,35 +66,32 @@ export default {
   width: 16rem;
   list-style: none;
   overflow: auto;
+  background: #e8fffd;
 }
 .auto{
   width: 100%;
   padding: .5rem 0;
   border-bottom: 1px solid #eee;
-  background: #fafafa;
+  background: #fff;
   color: #666;
   text-shadow: 0 0 1px #ccc;
 }
 .auto:hover{
-  background: #eee;
   cursor: pointer;
 }
-#star-list::-webkit-scrollbar{width: 5px; background: #fafafa;}
+#star-list::-webkit-scrollbar{width: 3px; background: #e8fffd;}
 #star-list::-webkit-scrollbar-button{display: none;}
-#star-list::-webkit-scrollbar-thumb{background: #aaa;border-radius: 2px;}
+#star-list::-webkit-scrollbar-thumb{background: #69d6cf;border-radius: 2px;}
 #star-list::-webkit-scrollbar-corner{display: none;}
 .star-item{
   margin: .3rem 0;
   padding: 0.5rem 1rem;
-  background: #fafafa;
+  background: #fff;
   border-top: 1px solid #eee;
   border-bottom: 1px solid #eee;
 }
 .star-active{
-  background: #eee;
-}
-.star-item:hover{
-  background: #eee;
+  background: #fafafa;
 }
 .star-title{
   display: flex;
@@ -104,7 +101,7 @@ export default {
 }
 .star-alias{
   margin-right: .5rem;
-  color: #5584c2;
+  color: #5195F1;
 }
 .star-name{
   font-size: .5rem;
