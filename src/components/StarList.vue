@@ -2,7 +2,11 @@
   <ul id="star-list" class="drag">
     <button class="auto" 
             v-if="ctag === 'Uncategorized' && stars.length !== 0"
-            @click="autoCate()">Auto Categorize</button>
+            @click="autoCate()">
+      <span class="auto-a"><i class="fa fa-spinner fa-1x auto-shift" v-if="auto"></i></span>
+      <span class="auto-b">Auto Categorize</span>
+      <span class="auto-c"></span>
+    </button>
     <li class="star-item"
         v-for="each of stars"
         :key="each.id"
@@ -40,7 +44,8 @@ export default {
     ...mapState({
       dialogbox: state => state.global.dialog,
       stars: state => state.star.currentList,
-      ctag: state => state.star.currentTag
+      ctag: state => state.star.currentTag,
+      auto: state => state.global.auto
     })
   },
   methods: {
@@ -69,12 +74,38 @@ export default {
   background: #e8fffd;
 }
 .auto{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
-  padding: .5rem 0;
+  height: 2.5rem;
   border-bottom: 1px solid #eee;
   background: #fff;
   color: #666;
   text-shadow: 0 0 1px #ccc;
+}
+.auto-b{
+  flex: 1;
+}
+.auto-a{
+  flex: 0 0 1rem;
+  margin-left: 2.5rem;
+}
+.auto-c{
+  flex: 0 0 1rem;
+  margin-right: 2.5rem;
+}
+.auto-shift{
+  animation: myshift 2s linear infinite;
+  -webkit-animation: myshift 2s linear infinite;
+}
+@keyframes myshift{
+  from {-webkit-transform:rotate(0deg);}
+  to {-webkit-transform:rotate(360deg);}
+}
+@-webkit-keyframes myshift{
+  from {-webkit-transform:rotate(0deg);}
+  to {-webkit-transform:rotate(360deg);}
 }
 .auto:hover{
   cursor: pointer;

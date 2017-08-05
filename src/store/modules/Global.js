@@ -12,6 +12,7 @@ export default {
       'Completed',
       'Failed'
     ],
+    auto: false,
     loading: true,
     tips: [],
     tipNum: 0
@@ -22,6 +23,9 @@ export default {
     },
     [types.SET_DIALOG_ID] (state, payload) {
       state.dialogId = payload.id
+    },
+    [types.SET_AUTO] (state, payload) {
+      state.auto = payload.flag
     },
     [types.SET_LOADING] (state, payload) {
       state.loading = payload.loading

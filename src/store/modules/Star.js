@@ -302,18 +302,33 @@ export default {
         stars: list
       })
     },
-    autoCate ({ dispatch, state, commit }) {
+    async autoCate ({ dispatch, state, commit }) {
+      commit(types.SET_SYNC, {sync: false})
+      commit(types.SET_AUTO, {flag: true})
       let todo = []
       for (let un of state.stars['Uncategorized']) {
         todo.push({id: un.id, tag: un.language})
       }
+      let n = 0
       for (let each of todo) {
-        commit(types.ADD_CATEGORY, {
-          id: each.id,
-          tag: each.tag
+        await http.post(`https://git-star.herokuapp.com/repos/${each.id}/cates`, {category: each.tag}).then((response) => {
+          if (response.status === 200) {
+            n++
+            commit(types.ADD_CATEGORY, {
+              id: each.id,
+              tag: each.tag
+            })
+          } else {
+          }
         })
       }
-      dispatch('addTip', {type: 'info', info: 'INFO: Auto categorize successful!'}).then(() => {})
+      if (n === todo.length) {
+        dispatch('addTip', {type: 'info', info: 'All succeed!'}).then(() => {})
+      } else {
+        dispatch('addTip', {type: 'error', info: `WARNING: ${n} succeed but ${todo.length - n}`}).then(() => {})
+      }
+      commit(types.SET_AUTO, {flag: false})
+      commit(types.SET_SYNC, {sync: true})
     }
   }
 }
