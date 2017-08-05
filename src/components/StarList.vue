@@ -1,5 +1,8 @@
 <template>
   <ul id="star-list" class="drag">
+    <button class="auto" 
+            v-if="ctag === 'Uncategorized' && stars.length !== 0"
+            @click="autoCate()">Auto Categorize</button>
     <li class="star-item"
         v-for="each of stars"
         :key="each.id"
@@ -15,6 +18,11 @@
         <span><i class="fa fa-user fa-1x"></i> {{ each.owner }}</span>
         <button class="star-rename" @click="editStar(each.id)"><i class="fa fa-edit fa-1x"></i></button>
       </p>
+      <ul class="star-tags" v-if="each.categories.length !== 0">
+        <li class="star-tag" v-for="t of each.categories" @click="selectTag(t)">
+          <i class="fa fa-tag fa-1x"></i> {{ t }}
+        </li>
+      </ul>
     </li>
   </ul>
 </template>
@@ -31,11 +39,12 @@ export default {
   computed: {
     ...mapState({
       dialogbox: state => state.global.dialog,
-      stars: state => state.star.currentList
+      stars: state => state.star.currentList,
+      ctag: state => state.star.currentTag
     })
   },
   methods: {
-    ...mapActions(['getCurrentStar', 'getEditId']),
+    ...mapActions(['getCurrentStar', 'getEditId', 'autoCate', 'getCurrentList']),
     selectStar (id) {
       this.isActive = id
       this.getCurrentStar(id)
@@ -43,6 +52,10 @@ export default {
     editStar (id) {
       window.event.cancelBubble = true
       this.getEditId(id)
+    },
+    selectTag (tag) {
+      window.event.cancelBubble = true
+      this.getCurrentList(tag)
     }
   }
 }
@@ -53,6 +66,18 @@ export default {
   width: 16rem;
   list-style: none;
   overflow: auto;
+}
+.auto{
+  width: 100%;
+  padding: .5rem 0;
+  border-bottom: 1px solid #eee;
+  background: #fafafa;
+  color: #666;
+  text-shadow: 0 0 1px #ccc;
+}
+.auto:hover{
+  background: #eee;
+  cursor: pointer;
 }
 #star-list::-webkit-scrollbar{width: 5px; background: #fafafa;}
 #star-list::-webkit-scrollbar-button{display: none;}
@@ -104,5 +129,18 @@ export default {
   font-size: 0.9rem;
   overflow: hidden;
   color: #666;
+}
+.star-tags{
+  border-top: 1px solid #ccc;
+  margin-top: 4px;
+  font-size: .8rem;
+  color: #666;
+}
+.star-tag{
+  display: inline-block;
+  margin: 3px 12px 0 0;
+}
+.star-tag:hover{
+  cursor: pointer;
 }
 </style>

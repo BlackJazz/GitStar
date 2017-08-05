@@ -9,9 +9,10 @@
     </div>
     <button class="search">
       <i class="fa fa-search fa-1x"></i>
-      <input class="input" type="text" v-model="keyword" @keyup.enter="search(keyword)">
+      <input class="input" type="text" v-model="keyword">
+      <p style="display: none;">{{ searchResult }}</p>
     </button>
-    <button class="title" @click="searchTag()"><span>Tags</span></button>
+    <button class="title" @click="searchTag()"><i class="fa fa-tags fa-1x"></i><span> Tags</span></button>
     <ul class="tag-list">
       <li class="tag-item"
           @click="selectTag(each)"
@@ -49,6 +50,9 @@ export default {
     }),
     url: function () {
       return `https://github.com/${this.username}`
+    },
+    searchResult: function () {
+      return this.searchStar(this.keyword)
     }
   },
   created () {
@@ -63,9 +67,6 @@ export default {
     },
     selectTag (tag) {
       this.getCurrentList(tag)
-    },
-    search (keyword) {
-      this.searchStar(keyword)
     },
     searchTag () {
       this.setDialog(true)
@@ -145,7 +146,7 @@ export default {
   color: #ccced6;
 }
 .tag-active{
-  background: #eee;
+  background: #fafafa;
   color: #444;
 }
 .tag-list::-webkit-scrollbar{width: 3px;}
@@ -158,8 +159,7 @@ export default {
   padding: 0.3rem 1rem;
 }
 .tag-item:hover{
-  background: #eee;
-  color: #444;
+  text-shadow: 0 0 3px #fff;
   cursor: pointer;
 }
 .tag-count{

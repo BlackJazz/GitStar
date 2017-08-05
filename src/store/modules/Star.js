@@ -277,6 +277,10 @@ export default {
       }
     },
     searchStar ({ state, commit }, keyword) {
+      if (keyword === '') return
+      commit(types.SET_CURRENT_TAG, {
+        tag: ''
+      })
       let list = []
       for (let each of state.stars['All']) {
         let k = false
@@ -297,6 +301,19 @@ export default {
       commit(types.SET_CURRENT_LIST, {
         stars: list
       })
+    },
+    autoCate ({ dispatch, state, commit }) {
+      let todo = []
+      for (let un of state.stars['Uncategorized']) {
+        todo.push({id: un.id, tag: un.language})
+      }
+      for (let each of todo) {
+        commit(types.ADD_CATEGORY, {
+          id: each.id,
+          tag: each.tag
+        })
+      }
+      dispatch('addTip', {type: 'info', info: 'INFO: Auto categorize successful!'}).then(() => {})
     }
   }
 }

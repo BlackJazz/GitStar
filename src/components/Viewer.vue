@@ -3,14 +3,15 @@
     <div class="box" v-if="!Object.is(star, null)">
       <div class="box-star">
         <p class="box-star-info">
-          <span>{{ star.name }}</span>
+          <a :href="star.url" target="_blank" class="box-star-name">{{ star.name }}</a>
           <span>
-            <i class="fa fa-user fa-1x"></i> {{ star.owner }}
+            <i class="fa fa-user fa-1x"></i>
+            <a :href="ownerUrl" target="_blank" class="box-star-owner">{{ star.owner }}</a>
           </span>
         </p>
         <p class="box-star-description">{{ star.description }}</p>
         <p class="box-star-description" v-if="star.comment_description">{{ star.comment_description }}</p>
-        <ul class="box-star-tags">
+        <ul class="box-star-tags" v-if="star.categories.length !== 0">
           <li v-for="each of star.categories" class="box-star-tag"><span>{{ each }}</span></li>
         </ul>
       </div>
@@ -52,6 +53,9 @@ export default {
         if (this.star.id === each.id) return each.md
       }
       return ''
+    },
+    ownerUrl: function () {
+      return `https://github.com/${this.star.owner}`
     }
   },
   methods: {
@@ -80,13 +84,22 @@ export default {
   justify-content: space-between;
   margin-bottom: .5rem;
 }
+.box-star-name, .box-star-owner{
+  color: #0366d6;
+}
+.box-star-owner{
+  margin-left: .5rem;
+}
+.box-star-name:hover, .box-star-owner:hover{
+  cursor: pointer;
+  text-decoration: underline;
+}
 .box-star-description{
-  border-top: 1px solid #eee;
   color: #666;
   padding: .5rem 0;
 }
 .box-star-tags{
-  padding: .5rem 0;
+  padding-top: .5rem;
   border-top: 1px solid #eee;
   list-style:none;
 }
