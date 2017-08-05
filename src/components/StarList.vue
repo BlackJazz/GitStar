@@ -1,7 +1,7 @@
 <template>
   <ul id="star-list" class="drag">
     <li class="star-item"
-        v-for="each of stars[tag]"
+        v-for="each of stars"
         :key="each.id"
         @click="selectStar(each.id)"
         :class="{ 'star-active': isActive === each.id }">
@@ -31,8 +31,7 @@ export default {
   computed: {
     ...mapState({
       dialogbox: state => state.global.dialog,
-      stars: state => state.star.stars,
-      tag: state => state.star.currentList
+      stars: state => state.star.currentList
     })
   },
   methods: {
@@ -90,6 +89,9 @@ export default {
   margin-left: .3rem;
   font-size: .9rem;
   color: #999;
+}
+.star-rename:hover{
+  cursor: pointer;
 }
 .star-info{
   display: flex;

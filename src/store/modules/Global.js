@@ -3,6 +3,7 @@ import * as types from '../mutation-types'
 export default {
   state: {
     dialog: false,
+    dialogId: 0,
     statusCode: 0,
     statusInfo: [
       'Online',
@@ -18,6 +19,9 @@ export default {
   mutations: {
     [types.SET_DIALOG] (state, payload) {
       state.dialog = payload.dialog
+    },
+    [types.SET_DIALOG_ID] (state, payload) {
+      state.dialogId = payload.id
     },
     [types.SET_LOADING] (state, payload) {
       state.loading = payload.loading
@@ -48,6 +52,11 @@ export default {
     setDialog ({ commit }, flag) {
       commit(types.SET_DIALOG, {
         dialog: flag
+      })
+    },
+    setDialogId ({ commit }, id) {
+      commit(types.SET_DIALOG_ID, {
+        id: id
       })
     },
     addTip ({ state, commit }, tip) {

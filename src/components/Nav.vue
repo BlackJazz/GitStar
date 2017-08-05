@@ -1,7 +1,7 @@
 <template>
   <nav id="nav">
     <div class="user">
-      <img class="avatar" :src="avatar">
+      <a :href="url" target="_blank"><img class="avatar" :src="avatar"></a>
       <span class="name">{{ username }}</span>
       <p>
         <button class="quit" @click="logout()">Quit</button>
@@ -9,15 +9,15 @@
     </div>
     <button class="search">
       <i class="fa fa-search fa-1x"></i>
-      <input class="input" type="text" placeholder="">
+      <input class="input" type="text" v-model="keyword" @keyup.enter="search(keyword)">
     </button>
-    <button class="title" @click="clickTip()">Tags</button>
+    <button class="title" @click="searchTag()"><span>Tags</span></button>
     <ul class="tag-list">
       <li class="tag-item"
           @click="selectTag(each)"
           v-for="each of Object.keys(stars)"
           :key="each"
-          :class="{ 'tag-active': isActive === each }">
+          :class="{ 'tag-active': ctag === each }">
         <span class="tag-name">{{ each }}</span>
         <span class="tag-count">{{ stars[each].length }}</span>
       </li>
@@ -37,29 +37,39 @@ export default {
   },
   data () {
     return {
-      isActive: 'All'
+      keyword: ''
     }
   },
   computed: {
     ...mapState({
       stars: state => state.star.stars,
+      ctag: state => state.star.currentTag,
       username: state => state.user.username,
       avatar: state => state.user.avatar
-    })
+    }),
+    url: function () {
+      return `https://github.com/${this.username}`
+    }
   },
   created () {
     this.getUser()
     this.getAll()
   },
   methods: {
-    ...mapActions(['getCurrentList', 'getUser', 'getAll']),
+    ...mapActions(['getCurrentList', 'getUser', 'getAll', 'searchStar', 'setDialog', 'setDialogId']),
     logout () {
       window.localStorage.removeItem('token')
       this.$router.replace({ path: '/' })
     },
     selectTag (tag) {
-      this.isActive = tag
       this.getCurrentList(tag)
+    },
+    search (keyword) {
+      this.searchStar(keyword)
+    },
+    searchTag () {
+      this.setDialog(true)
+      this.setDialogId(1)
     }
   }
 }
@@ -123,6 +133,9 @@ export default {
   color: #ccced6;
   font-size: 1rem;
   border-bottom: 1px solid #2e3344;
+}
+.title:hover{
+  cursor: pointer;
 }
 .tag-list{
   flex: 1;

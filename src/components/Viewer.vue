@@ -9,13 +9,13 @@
           </span>
         </p>
         <p class="box-star-description">{{ star.description }}</p>
+        <p class="box-star-description" v-if="star.comment_description">{{ star.comment_description }}</p>
         <ul class="box-star-tags">
-          <li v-for="each of star.categories"><span class="box-star-tag">each</span></li>
+          <li v-for="each of star.categories" class="box-star-tag"><span>{{ each }}</span></li>
         </ul>
       </div>
       <div class="box-read">
         <p class="box-read-info">
-          <span>README.md</span>
         </p>
         <div class="box-read-content">
           <vueMarkDown
@@ -78,16 +78,21 @@ export default {
 .box-star-info{
   display: flex;
   justify-content: space-between;
+  margin-bottom: .5rem;
 }
 .box-star-description{
+  border-top: 1px solid #eee;
   color: #666;
-  padding: 1rem 0;
+  padding: .5rem 0;
 }
 .box-star-tags{
-  padding-bottom: .5rem;
+  padding: .5rem 0;
+  border-top: 1px solid #eee;
   list-style:none;
 }
 .box-star-tag{
+  display: inline-block;
+  margin: 0 1rem .5rem 0;
   font-size: 0.7rem;
   padding: 0.2rem 0.5rem;
   border: 1px solid #aaa;

@@ -5,8 +5,9 @@ import Vue from 'vue'
 export default {
   state: {
     stars: {},
-    currentList: 'All',
+    currentList: null,
     mdList: [],
+    currentTag: 'All',
     currentStar: null,
     editId: null,
     sync: false
@@ -34,13 +35,16 @@ export default {
       }
     },
     [types.SET_CURRENT_LIST] (state, payload) {
-      state.currentList = payload.tag
+      state.currentList = payload.stars
     },
     [types.ADD_MD_LIST] (state, payload) {
       state.mdList.push(payload)
     },
     [types.EDIT_MD_LIST] (state, payload) {
       state.mdList[payload.index].md = payload.md
+    },
+    [types.SET_CURRENT_TAG] (state, payload) {
+      state.currentTag = payload.tag
     },
     [types.SET_CURRENT_STAR] (state, payload) {
       state.currentStar = payload.star
@@ -116,6 +120,9 @@ export default {
       commit(types.GET_ALL, {
         stars: stars
       })
+      commit(types.SET_CURRENT_LIST, {
+        stars: stars['All']
+      })
       commit(types.SET_LOADING, {
         loading: false
       })
@@ -123,8 +130,11 @@ export default {
         sync: true
       })
     },
-    getCurrentList ({ commit }, tag) {
+    getCurrentList ({ state, commit }, tag) {
       commit(types.SET_CURRENT_LIST, {
+        stars: state.stars[tag]
+      })
+      commit(types.SET_CURRENT_TAG, {
         tag: tag
       })
     },
@@ -170,6 +180,9 @@ export default {
       }
     },
     getEditId ({ commit }, id) {
+      commit(types.SET_DIALOG_ID, {
+        id: 0
+      })
       commit(types.SET_DIALOG, {
         dialog: true
       })
@@ -178,6 +191,7 @@ export default {
       })
     },
     async editStar ({ dispatch, commit }, star) {
+      commit(types.SET_SYNC, {sync: false})
       let { id, alias, description } = star
       let data = { 'name': alias, 'description': description }
       await http.patch(`https://git-star.herokuapp.com/repos/${id}`, data).then((response) => {
@@ -192,8 +206,10 @@ export default {
           dispatch('addTip', {type: 'error', info: 'ERROR: Failed to edit!'}).then(() => {})
         }
       })
+      commit(types.SET_SYNC, {sync: true})
     },
     async addStarTag ({ dispatch, commit }, star) {
+      commit(types.SET_SYNC, {sync: false})
       let { id, tag } = star
       let data = { category: tag }
       await http.post(`https://git-star.herokuapp.com/repos/${id}/cates`, data).then((response) => {
@@ -207,8 +223,10 @@ export default {
           dispatch('addTip', {type: 'error', info: 'ERROR: Failed to add tag!'}).then(() => {})
         }
       })
+      commit(types.SET_SYNC, {sync: true})
     },
     async deleteStarTag ({ dispatch, commit }, star) {
+      commit(types.SET_SYNC, {sync: false})
       let { id, tag } = star
       let data = { category: tag }
       await http.delete(`https://git-star.herokuapp.com/repos/${id}/cates`, { body: data }).then((response) => {
@@ -222,6 +240,7 @@ export default {
           dispatch('addTip', {type: 'error', info: 'ERROR: Failed to delete tag!'}).then(() => {})
         }
       })
+      commit(types.SET_SYNC, {sync: true})
     },
     setSync ({ commit }, flag) {
       commit(types.SET_SYNC, {
@@ -256,6 +275,28 @@ export default {
       } catch (e) {
         commit(types.SET_STATUS_CODE, { code: 4 })
       }
+    },
+    searchStar ({ state, commit }, keyword) {
+      let list = []
+      for (let each of state.stars['All']) {
+        let k = false
+        if (each.comment_description) {
+          if (each.comment_description.toLowerCase().includes(keyword.toLowerCase())) k = true
+        }
+        if (each.comment_name) {
+          if (each.comment_name.toLowerCase().includes(keyword.toLowerCase())) k = true
+        }
+        if (each.description) {
+          if (each.description.toLowerCase().includes(keyword.toLowerCase())) k = true
+        }
+        if (each.name) {
+          if (each.name.toLowerCase().includes(keyword.toLowerCase())) k = true
+        }
+        if (k) list.push(each)
+      }
+      commit(types.SET_CURRENT_LIST, {
+        stars: list
+      })
     }
   }
 }
