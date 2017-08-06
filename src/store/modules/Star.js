@@ -89,7 +89,7 @@ export default {
           //
           let j = state.stars[tag].findIndex((x) => x.id === each.id)
           if (j === 0) state.stars[tag].shift()
-          if (j > 0) state.stars[tag].splice(i, 1)
+          if (j > 0) state.stars[tag].splice(j, 1)
           if (state.stars[tag].length === 0) Vue.delete(state.stars, tag)
         }
       }
@@ -318,28 +318,37 @@ export default {
       commit(types.SET_SYNC, {sync: false})
       commit(types.SET_AUTO, {flag: true})
       let todo = []
-      for (let un of state.stars['Uncategorized']) {
-        todo.push({id: un.id, tag: un.language})
-      }
       let n = 0
-      for (let each of todo) {
-        try {
-          await http.post(`https://git-star.herokuapp.com/repos/${each.id}/cates`, {category: each.tag}).then((response) => {
-            if (response.status === 200) {
-              n++
-              commit(types.ADD_CATEGORY, {
-                id: each.id,
-                tag: each.tag
-              })
+      for (let un of state.stars['Uncategorized']) {
+        if (un.language) {
+          todo.push({id: un.id, tag: un.language})
+        } else {
+          for (let i of state.stars['All']) {
+            if (un.id === i.id) {
+              dispatch('addTip', {type: 'error', info: `[WARNING] ${un.name} failed to be categorized due to lack of language!`}).then(() => {})
             }
-          })
-        } catch (e) {
+          }
+          n++
         }
       }
-      if (n === todo.length) {
+      let task = []
+      for (let each of todo) {
+        task.push(http.post(`https://git-star.herokuapp.com/repos/${each.id}/cates`, {category: each.tag}).then(
+          (response) => {
+            commit(types.ADD_CATEGORY, {
+              id: each.id,
+              category: each.tag
+            })
+          })
+        )
+      }
+      await Promise.all(task)
+      if (n === 0) {
         dispatch('addTip', {type: 'info', info: '[INFO] All succeed!'}).then(() => {})
-      } else {
-        dispatch('addTip', {type: 'error', info: `[WARNING] ${n} succeed but ${todo.length - n}`}).then(() => {})
+      }
+      if (state.stars['Uncategorized'].length === 0) {
+        commit(types.SET_CURRENT_LIST, {stars: state.stars['All']})
+        commit(types.SET_CURRENT_TAG, {tag: 'All'})
       }
       commit(types.SET_AUTO, {flag: false})
       commit(types.SET_SYNC, {sync: true})

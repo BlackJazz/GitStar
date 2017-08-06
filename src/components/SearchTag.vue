@@ -3,7 +3,7 @@
     <span class="close" @click="close()"><i class="fa fa-times fa-1x"></i></span>
     <p class="search-input">
       <i class="fa fa-search fa-1x"></i>
-      <input type="text" v-model="keyword">
+      <input type="text" v-model="keyword" @keyup.esc="setDialog(false)">
     </p>
     <ul class="search-result" v-if="list.length !== 0">
       <li class="search-item" v-for="each of list" @click="selectTag(each)">{{ each }}</li>

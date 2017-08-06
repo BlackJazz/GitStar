@@ -40,7 +40,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style>
 .loading{
   display: flex;
   flex-direction: column;
@@ -48,13 +48,13 @@ export default {
   align-items: center;
   width: 100%;
   height: 100%;
-  background: #1abc9c;
+  background-image: linear-gradient(to top, #cfd9df 0%, #e2ebf0 100%);
   position: absolute;
   z-index: 999;
   font-size: 2rem;
 }
 .loading-text{
-  color: white;
+  color: #1abc9c;
   text-align: center;
   font-size: .6em;
   margin-top: 4rem;
@@ -67,7 +67,7 @@ export default {
 .container1 > div, .container2 > div, .container3 > div {
   width: 15px;
   height: 15px;
-  background-color: white;
+  background-color: #1abc9c;
   border-radius: 100%;
   position: absolute;
   -webkit-animation: bouncedelay 1.2s infinite ease-in-out;

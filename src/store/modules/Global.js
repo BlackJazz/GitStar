@@ -70,7 +70,7 @@ export default {
       })
       setTimeout(() => {
         state.tips.pop()
-      }, 5000)
+      }, 7000)
     },
     deleteTip ({ commit }, i) {
       commit(types.DELETE_TIP, {

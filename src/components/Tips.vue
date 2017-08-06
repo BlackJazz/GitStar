@@ -59,12 +59,12 @@ export default {
   word-break: normal;
 }
 .tip-fade{
-  animation: fade 5s forwards;
+  animation: fade 7s forwards;
 }
 @keyframes fade{
   0% {transform: scaleX(0);}
-  10% {transform: scaleX(1);}
-  75% {transform: scaleX(1); opacity: 1;}
+  7% {transform: scaleX(1);}
+  90% {transform: scaleX(1); opacity: 1;}
   100% {transform: scaleY(0); opacity: .1;}
 }
 </style>

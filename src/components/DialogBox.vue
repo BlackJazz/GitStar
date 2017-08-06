@@ -40,7 +40,7 @@ export default {
   box-shadow: 0 0 10px #666;
 }
 .scale{
-  animation: scale .4s forwards;
+  animation: scale .1s forwards;
 }
 @keyframes scale{
   0% {transform: scale(0.2); opacity: 0.1;}

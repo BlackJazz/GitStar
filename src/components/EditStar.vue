@@ -1,12 +1,18 @@
 <template>
   <div class="edit">
     <div class="edit-input">
-      <p class="alias"><input type="text" id="alias" :value="star.comment_name" placeholder="Alias"></p>
-      <p class="origin"><input type="text" :value="star.name" disabled="disabled"></p>
-      <p class="notes"><textarea rows="5" cols="50" id="description" :value="star.comment_description" placeholder="Notes"></textarea></p>
+      <p class="alias">
+        <input type="text" id="alias" :value="star.comment_name" placeholder="Alias" @keyup.esc="setDialog(false)">
+      </p>
+      <p class="origin">
+        <input type="text" :value="star.name" disabled="disabled">
+      </p>
+      <p class="notes">
+        <textarea rows="5" cols="50" id="description" :value="star.comment_description" placeholder="Notes" @keyup.esc="setDialog(false)"></textarea>
+      </p>
       <ul class="tags">
         <p class="title">
-          <input type="text" @keyup.enter="addTag()" placeholder="Tag" v-model="tag">
+          <input type="text" @keyup.enter="addTag()" placeholder="Tag" v-model="tag" @keyup.esc="setDialog(false)">
           <button class="add-tag" @click="addTag()"><i class="fa fa-check-square fa-1x"></i></button>
         </p>
         <li v-for="each of star.categories" :key="each">
