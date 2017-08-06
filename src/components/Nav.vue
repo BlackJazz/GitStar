@@ -32,7 +32,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
-import Statuss from '@/components/Statuss'
+const Statuss = resolve => require(['@/components/Statuss'], resolve)
 
 export default {
   name: 'nav',

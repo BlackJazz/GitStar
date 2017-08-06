@@ -1,8 +1,8 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/views/Login'
-import Home from '@/views/Home'
-import Oauth from '@/views/Oauth'
+const Login = resolve => require(['@/views/Login'], resolve)
+const Home = resolve => require(['@/views/Home'], resolve)
+const Oauth = resolve => require(['@/views/Oauth'], resolve)
 
 Vue.use(Router)
 

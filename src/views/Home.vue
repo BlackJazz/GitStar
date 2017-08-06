@@ -12,14 +12,14 @@
 </template>
 
 <script>
-import Navi from '@/components/Nav'
-import StarList from '@/components/StarList'
-import Viewer from '@/components/Viewer'
-import ResizeBar from '@/components/ResizeBar'
-import DialogBox from '@/components/DialogBox'
-import ShadowLayer from '@/components/ShadowLayer'
-import Loading from '@/components/Loading'
-import Tips from '@/components/Tips'
+const Navi = resolve => require(['@/components/Nav'], resolve)
+const StarList = resolve => require(['@/components/StarList'], resolve)
+const Viewer = resolve => require(['@/components/Viewer'], resolve)
+const ResizeBar = resolve => require(['@/components/ResizeBar'], resolve)
+const DialogBox = resolve => require(['@/components/DialogBox'], resolve)
+const ShadowLayer = resolve => require(['@/components/ShadowLayer'], resolve)
+const Loading = resolve => require(['@/components/Loading'], resolve)
+const Tips = resolve => require(['@/components/Tips'], resolve)
 
 export default {
   name: 'home',
