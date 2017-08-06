@@ -333,14 +333,12 @@ export default {
       }
       let task = []
       for (let each of todo) {
-        task.push(http.post(`https://git-star.herokuapp.com/repos/${each.id}/cates`, {category: each.tag}).then(
-          function (response) {
-            commit(types.ADD_CATEGORY, {
-              id: each.id,
-              category: each.tag
-            })
+        task.push(http.post(`https://git-star.herokuapp.com/repos/${each.id}/cates`, {category: each.tag}).then((response) => {
+          commit(types.ADD_CATEGORY, {
+            id: each.id,
+            tag: each.tag
           })
-        )
+        }))
       }
       await Promise.all(task)
       if (n === 0) {
