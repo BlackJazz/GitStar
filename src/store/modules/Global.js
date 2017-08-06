@@ -8,9 +8,9 @@ export default {
     statusInfo: [
       'Online',
       'Offline',
-      'Sync',
+      'Synchronizing',
       'Completed',
-      'Failed'
+      'Failed to sync'
     ],
     auto: false,
     loading: true,
@@ -70,7 +70,7 @@ export default {
       })
       setTimeout(() => {
         state.tips.pop()
-      }, 4000)
+      }, 5000)
     },
     deleteTip ({ commit }, i) {
       commit(types.DELETE_TIP, {

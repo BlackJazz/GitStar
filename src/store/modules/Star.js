@@ -194,52 +194,64 @@ export default {
       commit(types.SET_SYNC, {sync: false})
       let { id, alias, description } = star
       let data = { 'name': alias, 'description': description }
-      await http.patch(`https://git-star.herokuapp.com/repos/${id}`, data).then((response) => {
-        if (response.status === 200) {
-          commit(types.EDIT_STAR, {
-            id: id,
-            alias: alias,
-            description: description
-          })
-          dispatch('addTip', {type: 'info', info: 'INFO: Edit successful!'}).then(() => {})
-        } else {
-          dispatch('addTip', {type: 'error', info: 'ERROR: Failed to edit!'}).then(() => {})
-        }
-      })
+      try {
+        await http.patch(`https://git-star.herokuapp.com/repos/${id}`, data).then((response) => {
+          if (response.status === 200) {
+            commit(types.EDIT_STAR, {
+              id: id,
+              alias: alias,
+              description: description
+            })
+            dispatch('addTip', {type: 'info', info: '[INFO] Edit successful!'}).then(() => {})
+          } else {
+            dispatch('addTip', {type: 'error', info: '[ERROR] Failed to edit!'}).then(() => {})
+          }
+        })
+      } catch (e) {
+        dispatch('addTip', {type: 'error', info: '[ERROR] Failed to edit caused by network!'}).then(() => {})
+      }
       commit(types.SET_SYNC, {sync: true})
     },
     async addStarTag ({ dispatch, commit }, star) {
       commit(types.SET_SYNC, {sync: false})
       let { id, tag } = star
       let data = { category: tag }
-      await http.post(`https://git-star.herokuapp.com/repos/${id}/cates`, data).then((response) => {
-        if (response.status === 200) {
-          commit(types.ADD_CATEGORY, {
-            id: id,
-            tag: tag
-          })
-          dispatch('addTip', {type: 'info', info: 'INFO: Add tag successful!'}).then(() => {})
-        } else {
-          dispatch('addTip', {type: 'error', info: 'ERROR: Failed to add tag!'}).then(() => {})
-        }
-      })
+      try {
+        await http.post(`https://git-star.herokuapp.com/repos/${id}/cates`, data).then((response) => {
+          if (response.status === 200) {
+            commit(types.ADD_CATEGORY, {
+              id: id,
+              tag: tag
+            })
+            dispatch('addTip', {type: 'info', info: '[INFO] Add tag successful!'}).then(() => {})
+          } else {
+            dispatch('addTip', {type: 'error', info: '[ERROR] Failed to add tag!'}).then(() => {})
+          }
+        })
+      } catch (e) {
+        dispatch('addTip', {type: 'error', info: '[ERROR] Failed to add tag caused by network!'}).then(() => {})
+      }
       commit(types.SET_SYNC, {sync: true})
     },
     async deleteStarTag ({ dispatch, commit }, star) {
       commit(types.SET_SYNC, {sync: false})
       let { id, tag } = star
       let data = { category: tag }
-      await http.delete(`https://git-star.herokuapp.com/repos/${id}/cates`, { body: data }).then((response) => {
-        if (response.status === 200) {
-          commit(types.DELETE_CATEGORY, {
-            id: id,
-            tag: tag
-          })
-          dispatch('addTip', {type: 'info', info: 'INFO: Delete tag successful!'}).then(() => {})
-        } else {
-          dispatch('addTip', {type: 'error', info: 'ERROR: Failed to delete tag!'}).then(() => {})
-        }
-      })
+      try {
+        await http.delete(`https://git-star.herokuapp.com/repos/${id}/cates`, { body: data }).then((response) => {
+          if (response.status === 200) {
+            commit(types.DELETE_CATEGORY, {
+              id: id,
+              tag: tag
+            })
+            dispatch('addTip', {type: 'info', info: '[INFO] Delete tag successful!'}).then(() => {})
+          } else {
+            dispatch('addTip', {type: 'error', info: '[ERROR] Failed to delete tag!'}).then(() => {})
+          }
+        })
+      } catch (e) {
+        dispatch('addTip', {type: 'error', info: '[ERROR] Failed to delete tag caused by network!'}).then(() => {})
+      }
       commit(types.SET_SYNC, {sync: true})
     },
     setSync ({ commit }, flag) {
@@ -311,21 +323,23 @@ export default {
       }
       let n = 0
       for (let each of todo) {
-        await http.post(`https://git-star.herokuapp.com/repos/${each.id}/cates`, {category: each.tag}).then((response) => {
-          if (response.status === 200) {
-            n++
-            commit(types.ADD_CATEGORY, {
-              id: each.id,
-              tag: each.tag
-            })
-          } else {
-          }
-        })
+        try {
+          await http.post(`https://git-star.herokuapp.com/repos/${each.id}/cates`, {category: each.tag}).then((response) => {
+            if (response.status === 200) {
+              n++
+              commit(types.ADD_CATEGORY, {
+                id: each.id,
+                tag: each.tag
+              })
+            }
+          })
+        } catch (e) {
+        }
       }
       if (n === todo.length) {
-        dispatch('addTip', {type: 'info', info: 'All succeed!'}).then(() => {})
+        dispatch('addTip', {type: 'info', info: '[INFO] All succeed!'}).then(() => {})
       } else {
-        dispatch('addTip', {type: 'error', info: `WARNING: ${n} succeed but ${todo.length - n}`}).then(() => {})
+        dispatch('addTip', {type: 'error', info: `[WARNING] ${n} succeed but ${todo.length - n}`}).then(() => {})
       }
       commit(types.SET_AUTO, {flag: false})
       commit(types.SET_SYNC, {sync: true})

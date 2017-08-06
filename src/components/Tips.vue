@@ -5,13 +5,12 @@
         class="tip-fade"
         :class="{ 'tip-i': item.type === 'info', 'tip-e': item.type === 'error' }">
       <p>{{ item.info }}</p>
-      <button @click="clickTip(index)"></button>
     </li>
   </ul>
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 
 export default {
   name: 'tips',
@@ -21,12 +20,6 @@ export default {
     })
   },
   methods: {
-    ...mapActions(['deleteTip']),
-    clickTip (i) {
-      window.event.cancelBubble = true
-      console.log(i)
-      this.deleteTip(i)
-    }
   }
 }
 </script>
@@ -46,38 +39,32 @@ export default {
   display: flex;
   justify-content: space-between;
   margin-top: .5em;
-  padding: .2rem .6em;
+  padding: .2em .6em;
   box-shadow: 2px 2px 5px #aaa;
-  background: #d9edf7;
-  color: #31708f;
+  background: #81cdff;
+  color: #555;
 }
 .tip-e{
   display: flex;
   justify-content: space-between;
   margin-top: .5em;
-  padding: .2rem .5em;
-  border: 1px solid #ebccd1;
-  border-radius: .3em;
-  background: #f2dede;
-  color: #a94442;
+  padding: .2em .5em;
+  box-shadow: 2px 2px 5px #aaa;
+  background: #ff9c9c;
+  color: #555;
 }
 .tip-i p, .tip-e p{
-  max-width: 10em;
+  max-width: 11em;
   word-wrap: break-word;
   word-break: normal;
 }
-.tip-i i, .tip-e i{
-  color: #aaa;
-}
-.tip-i i:hover, .tip-e i:hover{
-  color: #666;
-  cursor: pointer;
-}
 .tip-fade{
-  animation: fade 1s 3s ease forwards;
+  animation: fade 5s forwards;
 }
 @keyframes fade{
-  from {}
-  to { opacity: 0; }
+  0% {transform: scaleX(0);}
+  10% {transform: scaleX(1);}
+  75% {transform: scaleX(1); opacity: 1;}
+  100% {transform: scaleY(0); opacity: .1;}
 }
 </style>

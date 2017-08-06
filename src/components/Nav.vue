@@ -7,11 +7,11 @@
         <button class="quit" @click="logout()"><i class="fa fa-sign-out fa-1x"></i></button>
       </p>
     </div>
-    <button class="search">
+    <div class="search">
       <i class="fa fa-search fa-1x"></i>
       <input class="input" type="text" v-model="keyword" placeholder="Search" @keyup.enter="searchStar(keyword)">
       <p style="display: none;">{{ searchResult }}</p>
-    </button>
+    </div>
     <button class="title" @click="searchTag()"><i class="fa fa-tags fa-1x"></i><span> Tags</span></button>
     <ul class="tag-list">
       <li class="tag-item"
@@ -119,6 +119,7 @@ export default {
   text-decoration: underline;
 }
 .search{
+  width: 80%;
   padding: .2rem;
   background: transparent;
   color: #fff;
@@ -137,8 +138,8 @@ export default {
 }
 .title{
   width: 100%;
-  padding: 0.5rem 0;
-  margin-bottom: .3rem;
+  padding: 5px 0;
+  margin: .3rem 0;
   color: #fff;
   font-size: 1rem;
   border-bottom: 1px solid #befffb;

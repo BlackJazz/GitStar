@@ -30,7 +30,7 @@ export default {
       http.get('http://git-star.herokuapp.com/stats')
           .then(
             (response) => {
-              if (response.body === '1') next({ path: '/home' })
+              if (response.body === '1') next({ path: '/dashboard' })
               else {
                 window.localStorage.clear()
                 next()
