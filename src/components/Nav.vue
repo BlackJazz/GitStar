@@ -58,12 +58,8 @@ export default {
       return this.searchStar(this.keyword)
     }
   },
-  created () {
-    this.getUser()
-    this.getAll()
-  },
   methods: {
-    ...mapActions(['getCurrentList', 'getUser', 'getAll', 'searchStar', 'setDialog', 'setDialogId']),
+    ...mapActions(['getCurrentList', 'searchStar', 'setDialog', 'setDialogId']),
     logout () {
       window.localStorage.removeItem('token')
       this.$router.replace({ path: '/' })

@@ -1,12 +1,12 @@
 <template>
   <div id="container">
+    <loading></loading>
     <navi></navi>
     <starList></starList>
     <resizeBar></resizeBar>
     <viewer></viewer>
     <dialogBox></dialogBox>
     <shadowLayer></shadowLayer>
-    <loading></loading>
     <tips></tips>
   </div>
 </template>

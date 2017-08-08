@@ -32,7 +32,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import VueMarkDown from 'vue-markdown'
+const VueMarkDown = resolve => require(['vue-markdown'], resolve)
 
 export default {
   name: 'viewer',

@@ -28,14 +28,21 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 
 export default {
   name: 'loading',
+  created () {
+    this.getUser()
+    this.getAll()
+  },
   computed: {
     ...mapState({
       loading: state => state.global.loading
     })
+  },
+  methods: {
+    ...mapActions(['getUser', 'getAll'])
   }
 }
 </script>
