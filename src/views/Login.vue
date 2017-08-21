@@ -27,7 +27,7 @@ export default {
   beforeRouteEnter (to, from, next) {
     let token = window.localStorage.getItem('token')
     if (token) {
-      http.get('http://git-star.herokuapp.com/stats')
+      http.get('https://git-star.herokuapp.com/stats')
           .then(
             (response) => {
               if (response.body === '1') next({ path: '/dashboard' })
